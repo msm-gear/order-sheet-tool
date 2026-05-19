@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSM Order Sheet Creator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+  <!-- Sign In -->
+  <div id="signin-screen" class="flex items-center justify-center min-h-screen">
+    <div class="bg-white rounded-2xl shadow-lg p-10 text-center max-w-sm w-full">
+      <div class="text-4xl mb-4">📋</div>
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">MSM Order Sheet</h1>
+      <p class="text-gray-500 mb-8 text-sm">Create order sheets from your template and save to Google Drive</p>
+      <button id="signin-btn" class="w-full bg-[#1a2b6b] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#162059] transition">
+        Sign in with Google
+      </button>
+      <div class="mt-4 pt-4 border-t border-gray-100">
+        <a href="https://msmdigitalgeardropcatalog2025.my.canva.site/msmdigitalcatalog2026"
+           target="_blank"
+           class="text-sm text-[#8B1A1A] hover:underline font-medium">
+          View 2026 Digital Catalog →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Tool -->
+  <div id="main-screen" class="hidden max-w-2xl mx-auto py-10 px-4 pb-24">
+
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-xl font-bold text-gray-800">MSM Order Sheet Creator</h1>
+      <div class="flex items-center gap-3">
+        <span id="user-email" class="text-xs text-gray-400"></span>
+        <button id="signout-btn" class="text-xs text-gray-400 hover:text-gray-600 underline">Sign out</button>
+      </div>
+    </div>
+
+    <div class="space-y-5">
+
+      <!-- Catalog & Pricing -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-semibold text-gray-700 text-sm uppercase tracking-wide">2026 Resources</h2>
+          <a href="https://msmdigitalgeardropcatalog2025.my.canva.site/msmdigitalcatalog2026"
+             target="_blank"
+             class="inline-flex items-center gap-2 bg-[#8B1A1A] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#7a1515] transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            MSM Digital Catalog 2026
+          </a>
+        </div>
+
+        <!-- Pricing Table -->
+        <div class="rounded-lg overflow-hidden border border-gray-200">
+          <div class="bg-[#8B1A1A] text-white text-center py-3">
+            <p class="font-bold text-sm uppercase tracking-wide">2026 Pricing Table</p>
+          </div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-[#1a2b6b] text-white">
+                <th class="py-2 px-4 text-left font-semibold tracking-wide">GEAR</th>
+                <th class="py-2 px-4 text-right font-semibold tracking-wide">COST</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Jerseys</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$14.50</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Flex Jerseys (MSM)</td><td id="pricing-flex-jersey" class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$14.50</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Reversible Jersey</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$18.50</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Hoodie</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$20.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Windbreaker</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$21.50</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Caps</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$11.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Tees</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$8.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Name Banner</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$100.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Additional Name Banner</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$35.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Park Banner (set of 5)</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$140.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Rings</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$10.50</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Hype Chains</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$12.00</td></tr>
+              <tr class="hover:bg-gray-50"><td class="py-2 px-4 text-gray-700">Custom Colorways</td><td class="py-2 px-4 text-right text-[#1a2b6b] font-semibold">$50.00</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-gray-400 text-center py-2 px-4 bg-gray-50">Prices subject to change without prior notice.</p>
+        </div>
+      </section>
+
+      <!-- Order Details -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Order Details</h2>
+        <div class="grid grid-cols-3 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Market</label>
+            <select id="market" onchange="onMarketChange(this.value)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b] bg-white">
+              <option value="">Select…</option>
+              <option>Austin</option>
+              <option>Dallas</option>
+              <option>DFW</option>
+              <option>Houston</option>
+              <option>Houston SBL</option>
+              <option>Houston Soccer</option>
+              <option>Kansas City</option>
+              <option>Las Vegas</option>
+              <option>Ohio</option>
+              <option>Orlando</option>
+              <option>San Antonio</option>
+              <option>South Florida</option>
+              <option>South Jersey</option>
+              <option>Tampa</option>
+              <option>West Texas</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Year</label>
+            <input id="year" type="text" placeholder="2026" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Season</label>
+            <select id="season" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b] bg-white">
+              <option value="">Select…</option>
+              <option value="Summer">Summer</option>
+              <option value="Fall">Fall</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Sport</label>
+            <select id="sport" onchange="onSportChange()" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b] bg-white">
+              <option value="">Select…</option>
+              <option>Baseball</option>
+              <option>Softball</option>
+              <option>7V7</option>
+              <option>Freshmen</option>
+              <option>Soccer</option>
+              <option>Golf</option>
+              <option>Bowling</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Order #</label>
+            <input id="order-num" type="text" placeholder="e.g. 1" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">Order Date</label>
+            <input id="order-date" type="date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 mb-1 block">ETA</label>
+            <input id="eta" type="date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+        </div>
+      </section>
+
+      <!-- Ship To -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Ship To <span class="text-red-500 normal-case font-normal tracking-normal">*</span></h2>
+        <div class="space-y-3">
+          <input id="ship-name"    type="text"  placeholder="Name"           class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          <input id="ship-address" type="text"  placeholder="Address"        class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          <input id="ship-phone"   type="text"  placeholder="Contact Number" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          <input id="ship-email"   type="email" placeholder="Email"          class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+        </div>
+      </section>
+
+      <!-- Data Source -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Data Source <span class="text-gray-400 font-normal normal-case tracking-normal text-xs">(registration sheet)</span></h2>
+        <div class="flex gap-2">
+          <input id="source-input" type="text"
+                 placeholder="Paste registration sheet URL"
+                 class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          <button id="use-source-btn"
+                  class="bg-[#1a2b6b] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#162059] transition whitespace-nowrap">
+            Load tabs
+          </button>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">Quantities will be pulled from this sheet into the order sheet</p>
+        <div id="source-status" class="hidden mt-2 text-xs font-medium"></div>
+
+        <!-- Gear mapping (shown after source is loaded) -->
+        <div id="gear-mapping-section" class="hidden mt-5 pt-5 border-t border-gray-100">
+          <p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-3">Tab → Gear Item Mapping</p>
+          <p class="text-xs text-gray-400 mb-3">Please select the correct tabs as data source for this order.</p>
+          <div id="gear-mapping-container" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- Tab Selector -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-gray-700 text-sm uppercase tracking-wide">Tabs to Include</h2>
+          <button id="load-tabs-btn" class="text-sm text-[#1a2b6b] hover:text-[#162059] font-medium">
+            Load from template →
+          </button>
+        </div>
+        <div id="tabs-container" class="text-sm text-gray-400 italic">
+          Click "Load from template" to see available tabs
+        </div>
+      </section>
+
+      <!-- Manual Quantities -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-1 text-sm uppercase tracking-wide">Manual Quantities</h2>
+        <p class="text-xs text-gray-400 mb-4">Enter quantities for items not in the registration sheet</p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Flex Jerseys (MSM)</label>
+            <input id="qty-flex-jerseys" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Gold Champ Rings</label>
+            <input id="qty-gold-rings" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Silver Finalist Rings</label>
+            <input id="qty-silver-rings" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Hype Chains</label>
+            <input id="qty-hype-chains" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Name Banner</label>
+            <input id="qty-name-banner" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Park Banner <span class="text-gray-400 text-xs">(set of 5)</span></label>
+            <input id="qty-park-banner" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-sm text-gray-700 flex-1">Custom Colorways</label>
+            <input id="qty-custom-colorways" type="number" min="0" value="0" oninput="updateSummary()"
+                   class="w-24 border border-gray-200 rounded-lg px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+          </div>
+        </div>
+      </section>
+
+      <!-- Sponsor -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Sponsor</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-700 mb-1">Has Sponsor?</label>
+            <select id="sponsor-type" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]"
+                    onchange="document.getElementById('sponsor-logo-row').classList.toggle('hidden', this.value === 'None')">
+              <option value="None">None</option>
+              <option value="Jersey only">Jersey only</option>
+              <option value="Name Banner only">Name Banner only</option>
+              <option value="Jersey &amp; Name Banner">Jersey &amp; Name Banner</option>
+            </select>
+          </div>
+          <div id="sponsor-logo-row" class="hidden">
+            <label class="block text-sm text-gray-700 mb-1">Sponsor Logo</label>
+            <input id="sponsor-logo" type="file"
+                   class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#1a2b6b] file:text-white hover:file:bg-[#162356] cursor-pointer">
+          </div>
+        </div>
+      </section>
+
+      <!-- Order Summary -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Order Summary</h2>
+        <div class="rounded-lg overflow-hidden border border-gray-200">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-[#1a2b6b] text-white">
+                <th class="py-2 px-3 text-left font-semibold">Gear</th>
+                <th class="py-2 px-3 text-right font-semibold">QTY</th>
+                <th class="py-2 px-3 text-right font-semibold">Unit Price</th>
+                <th class="py-2 px-3 text-right font-semibold">Total</th>
+              </tr>
+            </thead>
+            <tbody id="summary-body" class="divide-y divide-gray-100">
+              <!-- filled by updateSummary() -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-gray-50 font-semibold border-t-2 border-gray-200">
+                <td class="py-2 px-3 text-gray-700" colspan="3">TOTAL</td>
+                <td id="summary-grand-total" class="py-2 px-3 text-right text-[#1a2b6b]">—</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="text-xs text-gray-400 mt-2">* Auto items show qty as "auto" until sheet is created</p>
+      </section>
+
+      <!-- Drive Folder -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-4 text-sm uppercase tracking-wide">Save to Drive Folder</h2>
+        <input id="folder-input" type="text" placeholder="Paste Google Drive folder URL or ID"
+               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b]">
+        <p class="text-xs text-gray-400 mt-1">Leave empty to save to My Drive root</p>
+        <div id="recent-folders" class="mt-3"></div>
+      </section>
+
+      <!-- Ownership Transfer -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="font-semibold text-gray-700 mb-1 text-sm uppercase tracking-wide">Transfer Ownership</h2>
+        <p class="text-xs text-gray-400 mb-3">Required — new owner will receive an email to accept</p>
+        <input id="owner-email" type="email" value="gear@middleschoolmatchup.com" readonly
+               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+      </section>
+
+      <!-- Status -->
+      <div id="status" class="hidden p-4 rounded-xl border text-sm"></div>
+
+      <!-- Create -->
+      <button id="create-btn"
+              class="w-full bg-[#1a2b6b] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#162059] active:bg-[#0d1236] transition shadow-md">
+        Create Order Sheet
+      </button>
+
+    </div>
+  </div>
+
+<script>
+const CLIENT_ID        = '134231298951-m5l7h04ih2n863abpjov4dhh1pm0ibm5.apps.googleusercontent.com';
+const DEFAULT_TEMPLATE      = '11zjdotoueHTUrO4Qf3gBTlz98u5PZyyn1rSojLn0jGI'; // Baseball / Softball
+const NON_BASEBALL_TEMPLATE = '1Ie3pz6lIwnZIkdZNqgBFROi1dkPgh9qJp7av-wwBMtI'; // all other sports
+const SCOPES           = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/gmail.send';
+
+// All items shown in the order summary
+// Tee unit prices by sport. Baseball = $11, all others = $12.
+const TEE_DEFAULT_PRICE = 8.00;
+
+function getTeePrice() {
+  return TEE_DEFAULT_PRICE;
+}
+
+// Soccer, Bowling, 7V7 use Reversible Jersey pricing ($18.50); all others use regular ($14.50)
+const REVERSIBLE_JERSEY_SPORTS = new Set(['Soccer', 'Bowling', '7V7']);
+function getJerseyPrice() {
+  const s = document.getElementById('sport')?.value || '';
+  return REVERSIBLE_JERSEY_SPORTS.has(s) ? 18.50 : 14.50;
+}
+
+function resolveTemplateId() {
+  const s = document.getElementById('sport')?.value || '';
+  return (s === 'Baseball' || s === 'Softball' || !s) ? DEFAULT_TEMPLATE : NON_BASEBALL_TEMPLATE;
+}
+
+function onSportChange() {
+  updateSummary();
+  const price = getJerseyPrice();
+  const el = document.getElementById('pricing-flex-jersey');
+  if (el) el.textContent = `$${price.toFixed(2)}`;
+  const newId = resolveTemplateId();
+  if (newId !== templateId) {
+    templateId = newId;
+    if (allTabs.length > 0) loadTemplateTabs(); // silently reload tabs for the new template
+  }
+}
+
+// source: 'auto' = pulled from registration sheet tabs
+//         'manual' = entered by user on this page
+// templateRow: the gear name as it appears in column A of the template
+// dataRange:   column range (or cell) to read from the source registration tab
+const GEAR_ITEMS = [
+  { name: 'Jerseys',                keywords: ['jersey'],              get unitPrice() { return getJerseyPrice(); }, source: 'auto',   templateRow: 'Jerseys',      inputId: null, fillType: 'full_table',   dataRange: 'A:ZZ', totalCol: 'J' },
+  { name: 'Hoodies',                keywords: ['hoodie'],              unitPrice: 20.00,  source: 'auto',   templateRow: 'Hoodies',      inputId: null, fillType: 'full_table',   dataRange: 'A:ZZ', totalCol: 'J' },
+  { name: 'Tees',                   keywords: ['tee'],                 get unitPrice() { return getTeePrice(); }, source: 'auto',   templateRow: 'Tees',         inputId: null, fillType: 'sizes_only',   dataRange: 'E:F',  totalCol: 'D' },
+  { name: 'Jackets',                keywords: ['jacket','windbreaker'],unitPrice: 21.50,  source: 'auto',   templateRow: 'Jackets',      inputId: null, fillType: 'sizes_only',   dataRange: 'E:F',  totalCol: 'D' },
+  { name: 'Caps',                   keywords: ['cap'],                 unitPrice: 11.00,  source: 'auto',   templateRow: 'Caps',         inputId: null, fillType: 'single_total', dataRange: 'A2',   totalCol: 'A' },
+  { name: 'Gold Champ Rings',       keywords: [],                      unitPrice: 10.50,  source: 'manual', templateRow: 'Rings - Champs',   inputId: 'qty-gold-rings' },
+  { name: 'Silver Finalist Rings',  keywords: [],                      unitPrice: 10.50,  source: 'manual', templateRow: 'Rings - Finalist', inputId: 'qty-silver-rings' },
+  { name: 'Flex Jerseys (MSM)',      keywords: ['flex'],                get unitPrice() { return getJerseyPrice(); }, source: 'manual', templateRow: 'Flex Jerseys',     inputId: 'qty-flex-jerseys' },
+  { name: 'Hype Chains',            keywords: ['hype','chain'],        unitPrice: 12.00,  source: 'manual', templateRow: 'Hype Chains',      inputId: 'qty-hype-chains' },
+  { name: 'Name Banner',            keywords: ['name banner'],         unitPrice: 100.00, source: 'manual', templateRow: 'Name Banner',      inputId: 'qty-name-banner' },
+  { name: 'Park Banner (set of 5)', keywords: ['park'],                unitPrice: 140.00, source: 'manual', templateRow: 'Park Banner Pack',    inputId: 'qty-park-banner' },
+  { name: 'Custom Colorways',       keywords: ['colorway','custom'],   unitPrice: 50.00,  source: 'manual', templateRow: 'Custom Colorways',   inputId: 'qty-custom-colorways', emailOnly: true },
+];
+
+let accessToken  = null;
+let templateId   = DEFAULT_TEMPLATE;
+let allTabs      = [];
+let selectedTabs = new Set();
+let tokenClient;
+
+// Data source state
+let sourceSheetId = null;
+let sourceTabs    = [];
+let gearMapping   = {};  // { gearName: { id, title } }
+
+// Populated after sheet creation — used by submitOrder()
+let lastOrderData = null;
+
+// ── Market contacts ───────────────────────────────────────────────────────────
+
+const MARKET_CONTACTS = {
+  'Austin':        { name: 'Corey Bailey',    address: '508 Otto Avenue, Georgetown TX 78626',                          phone: '512-653-5591',  email: 'austin@middleschoolmatchup.com' },
+  'Dallas':        { name: 'Gavin Himel',     address: '6249 Edgestone Dr 75034, Frisco TX',                            phone: '469-912-4187',  email: 'gavin@middleschoolmatchup.com' },
+  'DFW':           { name: 'Colin Burns',     address: '837 Landmark Drive, Aledo, TX 76008',                           phone: '682-999-9240',  email: 'dfwwest@middleschoolmatchup.com' },
+  'Houston':       { name: 'Wes Hollas',      address: '6006 Boulder Lake Ct, Kingwood, TX 77345',                      phone: '713-557-1945',  email: 'wes@middleschoolmatchup.com' },
+  'Houston SBL':   { name: 'Camille Amaro',   address: '2339 Pettingell Way, Spring, TX 77373',                         phone: '361-772-4679',  email: 'camgrahmann@live.com' },
+  'Houston Soccer':{ name: 'Trey Tesno',      address: '34 Verbena Bend Pl, Spring, TX 77382',                          phone: '346-831-4750',  email: 'houston@middleschoolmatchup.com' },
+  'Kansas City':   { name: 'Jaxon Himel',     address: '2121 Central Street, Kansas City, MO 64108, Apartment 401',     phone: '469-912-4198',  email: 'jaxonhimel@middleschoolmatchup.com' },
+  'Las Vegas':     { name: 'Sacha Donovan',   address: '509 Nursery Rd, Spring, TX 77380',                              phone: '310-483-9399',  email: 'lasvegas@middleschoolmatchup.com' },
+  'Ohio':          { name: 'Austin Smith',    address: '3858 Cuba Rd, Wilmington, OH 45177',                            phone: '937-838-4340',  email: 'austin8339@gmail.com' },
+  'Orlando':       { name: 'Leisa Morgan',    address: '2143 Sunshine Peak Dr, Minneola, FL 34756',                     phone: '214-842-7976',  email: 'orlando@middleschoolmatchup.com' },
+  'San Antonio':   { name: 'Paige Kovar',     address: '13003 Ferry Cove Lane, Pearland, TX 77584',                     phone: '281-468-4838',  email: 'paige@middleschoolmatchup.com' },
+  'South Florida': { name: 'Tre Ratliff',     address: '450 Martin Rd, Margate, FL 33063',                              phone: '954-245-8873',  email: 'Southflorida@middleschoolmatchup.com' },
+  'South Jersey':  { name: 'Leon Wright',     address: '146 E Wolfert Station Rd, Mickleton, NJ 08056',                 phone: '310-483-9399',  email: 'southjersey@middleschoolmatchup.com' },
+  'Tampa':         { name: 'Amanda DeJiulio', address: "5392 Angelonia Terrace, Land O' Lakes, FL 34639",               phone: '352-804-4905',  email: 'tampa@middleschoolmatchup.com' },
+  'West Texas':    { name: 'Melissa Boland',  address: '6507 Saddle Horn Ln, Midland, TX 79707',                        phone: '254-707-3258',  email: 'westtexas@middleschoolmatchup.com' },
+};
+
+function onMarketChange(market) {
+  const contact = MARKET_CONTACTS[market];
+  if (!contact) return;
+  document.getElementById('ship-name').value    = contact.name;
+  document.getElementById('ship-address').value = contact.address;
+  document.getElementById('ship-phone').value   = contact.phone;
+  document.getElementById('ship-email').value   = contact.email;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+function setEtaFromOrderDate(dateVal) {
+  if (!dateVal) return;
+  const d = new Date(dateVal);
+  d.setDate(d.getDate() + 28);
+  document.getElementById('eta').value = d.toISOString().slice(0, 10);
+}
+
+window.addEventListener('load', () => {
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('order-date').value = today;
+  setEtaFromOrderDate(today);
+
+  document.getElementById('order-date').addEventListener('change', e => setEtaFromOrderDate(e.target.value));
+  updateSummary();
+
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope:     SCOPES,
+    callback:  handleTokenResponse,
+  });
+
+  document.getElementById('signin-btn').addEventListener('click',    () => tokenClient.requestAccessToken());
+  document.getElementById('signout-btn').addEventListener('click',   signOut);
+  document.getElementById('load-tabs-btn').addEventListener('click', loadTemplateTabs);
+  document.getElementById('create-btn').addEventListener('click',    createOrderSheet);
+  document.getElementById('use-source-btn').addEventListener('click', applyDataSource);
+});
+
+function handleTokenResponse(resp) {
+  if (resp.error) { showStatus('Auth error: ' + resp.error, 'error'); return; }
+  accessToken = resp.access_token;
+  showMainScreen();
+}
+
+function showMainScreen() {
+  document.getElementById('signin-screen').classList.add('hidden');
+  document.getElementById('main-screen').classList.remove('hidden');
+  loadRecentFolders();
+}
+
+function signOut() {
+  google.accounts.oauth2.revoke(accessToken, () => {
+    accessToken = null;
+    document.getElementById('main-screen').classList.add('hidden');
+    document.getElementById('signin-screen').classList.remove('hidden');
+    document.getElementById('tabs-container').innerHTML = 'Click "Load from template" to see available tabs';
+    allTabs = []; selectedTabs.clear();
+  });
+}
+
+// ── API helpers ───────────────────────────────────────────────────────────────
+
+async function api(method, url, body) {
+  if (method !== 'GET' && sourceSheetId && url.includes(sourceSheetId)) {
+    throw new Error('Blocked: attempted write to data source sheet. No changes were made.');
+  }
+  const opts = {
+    method,
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  const text = await res.text();
+  if (!res.ok) throw new Error(text);
+  return text ? JSON.parse(text) : null;
+}
+
+const GET   = url       => api('GET',   url, null);
+const POST  = (url, b)  => api('POST',  url, b);
+const PATCH = (url, b)  => api('PATCH', url, b);
+
+// ── Data source ───────────────────────────────────────────────────────────────
+
+function extractSheetId(raw) {
+  if (!raw) return null;
+  const m = raw.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  return m ? m[1] : raw.trim();
+}
+
+function showSourceStatus(msg, type) {
+  const el = document.getElementById('source-status');
+  el.textContent = msg;
+  el.className = `mt-2 text-xs font-medium ${type === 'error' ? 'text-red-500' : 'text-green-600'}`;
+  el.classList.remove('hidden');
+}
+
+async function applyDataSource() {
+  const raw = document.getElementById('source-input').value.trim();
+  if (!raw) {
+    sourceSheetId = null; sourceTabs = []; gearMapping = {};
+    document.getElementById('gear-mapping-section').classList.add('hidden');
+    return;
+  }
+  const id = extractSheetId(raw);
+  if (!id) { showSourceStatus('⚠ Could not parse sheet ID from that URL', 'error'); return; }
+
+  const btn = document.getElementById('use-source-btn');
+  btn.textContent = 'Loading…'; btn.disabled = true;
+
+  try {
+    const data = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${id}?fields=sheets.properties`);
+    sourceSheetId = id;
+    sourceTabs = data.sheets.map(s => ({ id: s.properties.sheetId, title: s.properties.title }));
+    gearMapping = autoMapGear(sourceTabs);
+    renderGearMapping();
+    showSourceStatus(`✓ ${sourceTabs.length} tabs loaded — ${Object.keys(gearMapping).length} gear items auto-mapped`, 'success');
+  } catch (e) {
+    let msg = e.message;
+    try { msg = JSON.parse(msg).error?.message || msg; } catch (_) {}
+    showSourceStatus('⚠ ' + msg, 'error');
+  }
+  btn.textContent = 'Load tabs'; btn.disabled = false;
+}
+
+function autoMapGear(tabs) {
+  const map = {};
+  GEAR_ITEMS.filter(g => g.source === 'auto').forEach(gear => {
+    const match = tabs.find(tab =>
+      gear.keywords.some(kw => tab.title.toLowerCase().includes(kw))
+    );
+    if (match) map[gear.name] = match;
+  });
+  return map;
+}
+
+function renderGearMapping() {
+  const section   = document.getElementById('gear-mapping-section');
+  const container = document.getElementById('gear-mapping-container');
+  section.classList.remove('hidden');
+
+  container.innerHTML = GEAR_ITEMS.filter(g => g.source === 'auto').map(gear => `
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-gray-700 w-28 flex-shrink-0">${escHtml(gear.name)}</span>
+      <select data-gear="${escAttr(gear.name)}"
+              onchange="updateGearMapping('${escAttr(gear.name)}', this.value)"
+              class="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2b6b] bg-white">
+        <option value="">— not mapped —</option>
+        ${sourceTabs.map(tab => `
+          <option value="${tab.id}" ${gearMapping[gear.name]?.id === tab.id ? 'selected' : ''}>
+            ${escHtml(tab.title)}
+          </option>`).join('')}
+      </select>
+    </div>`).join('');
+}
+
+function updateGearMapping(gearName, tabIdStr) {
+  if (!tabIdStr) { delete gearMapping[gearName]; return; }
+  const tab = sourceTabs.find(t => String(t.id) === tabIdStr);
+  if (tab) gearMapping[gearName] = tab;
+}
+
+// Read total qty from a source tab: return the LAST positive number in totalCol.
+// Single quotes around the tab name ensure spaces in tab names work correctly.
+// Jersey/Hoodie → col J, Tee/Jacket → col D, Caps → col A (cell A2)
+// errors array is optional — if provided, push diagnostic messages instead of calling showStatus directly
+// sheetId defaults to sourceSheetId; pass fileId to read from the order sheet copy instead
+async function getGearTotal(tabTitle, item, errors, sheetId) {
+  sheetId = sheetId || sourceSheetId;
+  const col = item?.totalCol;
+  if (!col) return 0;
+
+  // For single_total (Caps) read the specific declared cell rather than scanning the column.
+  const cellRef = item.fillType === 'single_total' ? item.dataRange : `${col}:${col}`;
+
+  let rows;
+  try {
+    const range = encodeURIComponent(`'${tabTitle}'!${cellRef}`);
+    const data  = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?majorDimension=ROWS`
+    );
+    rows = data.values || [];
+  } catch (e) {
+    const msg = `API error reading "${tabTitle}"!${cellRef}: ${e?.message || e}`;
+    console.warn('getGearTotal —', msg);
+    if (errors) errors.push(msg); else showStatus(`⚠ ${msg}`, 'error');
+    return 0;
+  }
+
+  // Scan from the bottom for the last non-empty positive number in the first column
+  // of the response (always index 0 because we read a single-column or single-cell range).
+  for (let i = rows.length - 1; i >= 0; i--) {
+    const raw = rows[i]?.[0];
+    const val = parseFloat(String(raw ?? '').replace(/,/g, '').trim());
+    if (!isNaN(val) && val > 0) {
+      console.log(`getGearTotal "${tabTitle}" col ${col}: ${val} (row ${i})`);
+      return val;
+    }
+  }
+
+  const seen = rows.map(r => r?.[0]).filter(v => v != null && v !== '');
+  const msg  = `"${tabTitle}" col ${col} (${rows.length} rows returned): no positive number found. Non-empty values: [${seen.join(', ') || 'none'}]`;
+  console.warn('getGearTotal 0 —', msg);
+  if (errors) errors.push(msg); else showStatus(`⚠ ${msg}`, 'error');
+  return 0;
+}
+
+// Fill gear quantities, unit prices, and totals into the copied order sheet
+async function fillQuantities(fileId) {
+  // ── Build qty/price maps from all sources ─────────────────────────────────
+  const qtyMap   = {};
+  const priceMap = {};
+
+  // Log full mapping status so user can see which auto items are missing
+  const autoItems = GEAR_ITEMS.filter(g => g.source === 'auto');
+  const notMapped = autoItems.filter(g => !gearMapping[g.name]).map(g => g.name);
+  const mapLines  = autoItems.map(g =>
+    gearMapping[g.name] ? `${g.name} → "${gearMapping[g.name].title}"` : `⚠ ${g.name}: NOT MAPPED`
+  );
+  console.log('fillQuantities gearMapping:', mapLines.join(' | '));
+
+  const errors = notMapped.map(n => `${n}: not mapped to any source tab`);
+
+  // Fetch the order sheet tab list once so we can match gear tabs by keyword.
+  // fillGearTabs already ran before this function, so order-sheet gear tabs have
+  // the correct totals written (or computed via template formulas).
+  const orderMeta = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}?fields=sheets.properties`);
+  const orderTabs = (orderMeta.sheets || []).map(s => s.properties.title);
+
+  for (const [gearName, tab] of Object.entries(gearMapping)) {
+    const item = GEAR_ITEMS.find(g => g.name === gearName);
+    if (!item) continue;
+
+    let qty;
+    if (item.fillType === 'single_total') {
+      // Caps: read a specific cell from the source registration sheet
+      qty = await getGearTotal(tab.title, item, errors);
+    } else {
+      // full_table / sizes_only: fillGearTabs already wrote correct data into the
+      // order sheet gear tab.  Read totalCol from that tab instead of the source.
+      const kw = item.templateRow.toLowerCase().split(' ')[0].replace(/s$/, '');
+      const orderTabTitle = orderTabs.find(t => t.toLowerCase().includes(kw));
+      if (orderTabTitle) {
+        qty = await getGearTotal(orderTabTitle, item, errors, fileId);
+      } else {
+        errors.push(`${item.name}: no matching tab found in order sheet (keyword "${kw}")`);
+        qty = 0;
+      }
+    }
+
+    qtyMap[item.templateRow]  = (qtyMap[item.templateRow]  || 0) + qty;
+    if (item.unitPrice != null) priceMap[item.templateRow] = item.unitPrice;
+  }
+
+  if (errors.length) {
+    showStatus(
+      `<b>⚠ Qty warnings (${errors.length}):</b><br>` + errors.map(e => `• ${e}`).join('<br>'),
+      'error'
+    );
+  } else {
+    showStatus(mapLines.join('<br>'), 'info');
+  }
+
+  for (const item of GEAR_ITEMS.filter(g => g.source === 'manual' && !g.emailOnly)) {
+    const qty = parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0;
+    qtyMap[item.templateRow]  = (qtyMap[item.templateRow]  || 0) + qty;
+    if (item.unitPrice != null) priceMap[item.templateRow] = item.unitPrice;
+  }
+
+  if (!Object.keys(qtyMap).length) return;
+
+  // ── Scan every order-sheet tab for gear rows to write QTY ────────────────
+  const GEAR_KWS_QTY = ['jersey', 'hoodie', 'tee', 'jacket', 'cap', 'ring', 'chain', 'banner'];
+  const updates = [];
+
+  for (const sheet of orderMeta.sheets) {
+    const tabTitle  = sheet.properties.title;
+    const isGearTab = GEAR_KWS_QTY.some(kw => tabTitle.toLowerCase().includes(kw));
+    const sheetData = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(tabTitle)}?majorDimension=ROWS`
+    );
+    const rows = sheetData.values || [];
+    if (rows.length < 2) continue;
+
+    // Find QTY column: scan header row first, then look for numeric cells in gear rows
+    let globalQtyCol = -1;
+    const headerRow = rows[0].map(h => String(h || '').toLowerCase().trim());
+    globalQtyCol = headerRow.findIndex(h => h === 'qty');
+    if (globalQtyCol === -1) globalQtyCol = headerRow.findIndex(h => h.includes('qty'));
+
+    for (const [templateRow, qty] of Object.entries(qtyMap)) {
+      const keywords  = templateRow.toLowerCase().split(' ');
+      const validKWs  = keywords.filter(kw => kw.length > 2);
+      const minMatch  = Math.min(2, validKWs.length);
+
+      // Search every cell in every row for the gear name
+      let foundRow = -1, foundCol = -1;
+      outer:
+      for (let ri = 0; ri < rows.length; ri++) {
+        for (let ci = 0; ci < (rows[ri] || []).length; ci++) {
+          const cell = String(rows[ri][ci] || '').toLowerCase().trim();
+          const matchCount = validKWs.filter(kw => cell.includes(kw)).length;
+          if (cell === templateRow.toLowerCase() ||
+              (cell.length > 2 && matchCount >= minMatch)) {
+            foundRow = ri; foundCol = ci;
+            break outer;
+          }
+        }
+      }
+      if (foundRow === -1) continue;
+
+      // Find QTY col for this row: use global detection, or find first numeric cell
+      // to the right of the gear name cell
+      let writeCol = globalQtyCol;
+      if (writeCol === -1) {
+        for (let ci = foundCol + 1; ci < (rows[foundRow] || []).length; ci++) {
+          const v = String(rows[foundRow][ci] || '').trim();
+          if (v !== '' && !isNaN(parseFloat(v))) { writeCol = ci; break; }
+        }
+      }
+      if (writeCol === -1) writeCol = foundCol + 1; // last resort: one column right
+
+      const rowNum = foundRow + 1;
+      const cQ = colLetter(writeCol);
+
+      // Accumulate: if two items target the same cell (e.g. Rings - Champs + Rings - Finalist
+      // both match the "Rings" row) SUM them instead of overwriting.
+      const rangeKey = `'${tabTitle}'!${cQ}${rowNum}`;
+      const existing = updates.find(u => u.range === rangeKey);
+      if (existing) {
+        existing.values[0][0] += qty;
+      } else {
+        updates.push({ range: rangeKey, values: [[qty]] });
+      }
+    }
+  }
+
+  if (updates.length) {
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+      valueInputOption: 'RAW',
+      data: updates,
+    });
+  }
+
+  return { qtyMap };
+}
+
+// Fill a "Summary" tab (any tab whose name contains "summary") with the full breakdown
+async function fillSummaryTab(fileId, resolved) {
+  if (!resolved) return;
+  const { qtyMap } = resolved;
+
+  const meta = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}?fields=sheets.properties`);
+
+  // Build qty+price data for every gear item (exclude emailOnly items from the sheet)
+  const gearData = GEAR_ITEMS.filter(item => !item.emailOnly).map(item => {
+    const qty = item.source === 'manual'
+      ? (parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0)
+      : (qtyMap[item.templateRow] || 0);
+    return { item, qty };
+  });
+
+  const GEAR_KWS_SUM = ['jersey', 'hoodie', 'tee', 'jacket', 'cap', 'ring', 'chain', 'banner', 'award'];
+
+  // Helper: format a column range as US currency ($#,##0.00)
+  function currencyFmt(sheetId, startRow, endRow, colIdx) {
+    return {
+      repeatCell: {
+        range: { sheetId, startRowIndex: startRow, endRowIndex: endRow, startColumnIndex: colIdx, endColumnIndex: colIdx + 1 },
+        cell: { userEnteredFormat: { numberFormat: { type: 'CURRENCY', pattern: '"$"#,##0.00' } } },
+        fields: 'userEnteredFormat.numberFormat',
+      },
+    };
+  }
+
+  for (const sheet of meta.sheets) {
+    const tabTitle = sheet.properties.title;
+    const sheetId  = sheet.properties.sheetId;
+    const tLow     = tabTitle.toLowerCase();
+
+    // Target: tabs explicitly named "summary" get a fresh written table;
+    // tabs that are neither gear tabs nor award tabs get prices filled into their existing structure.
+    const isSummary = tLow.includes('summary');
+    const isGear    = GEAR_KWS_SUM.some(kw => tLow.includes(kw));
+    if (!isSummary && isGear) continue;
+
+    const tabData = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(tabTitle)}?majorDimension=ROWS`
+    );
+    const rows = tabData.values || [];
+
+    if (isSummary) {
+      // Write a full table from A1 (summary tab is dedicated to this)
+      const tableRows = [['GEAR', 'QTY', 'UNIT PRICE', 'TOTAL']];
+      let grandTotal = 0;
+      for (const { item, qty } of gearData) {
+        const total = item.unitPrice != null ? qty * item.unitPrice : null;
+        if (total != null) grandTotal += total;
+        tableRows.push([item.name, qty, item.unitPrice ?? '', total ?? '']);
+      }
+      tableRows.push(['TOTAL', '', '', grandTotal]);
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+        valueInputOption: 'RAW',
+        data: [{ range: `'${tabTitle}'!A1`, values: tableRows }],
+      });
+      // Apply currency format to UNIT PRICE (col C = idx 2) and TOTAL (col D = idx 3),
+      // rows 1..tableRows.length (0-indexed, skipping header row 0)
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: [currencyFmt(sheetId, 1, tableRows.length, 2), currencyFmt(sheetId, 1, tableRows.length, 3)],
+      });
+
+    } else {
+      // Non-gear, non-summary tab (home/order page): fill prices into the existing table structure.
+      // Find the header row that has a QTY column, then locate each gear item row by name.
+      let qtyColIdx = -1, priceColIdx = -1, totalColIdx = -1, gearColIdx = -1, hdrRowIdx = -1;
+      for (let ri = 0; ri < rows.length; ri++) {
+        const norm = (rows[ri] || []).map(c => String(c || '').toUpperCase().trim());
+        const qi = norm.findIndex(c => c === 'QTY' || c === 'QUANTITY');
+        if (qi < 0) continue;
+        hdrRowIdx   = ri;
+        qtyColIdx   = qi;
+        gearColIdx  = norm.findIndex(c => c === 'GEAR' || c === 'ITEM' || c === 'DESCRIPTION');
+        if (gearColIdx < 0) gearColIdx = Math.max(0, qi - 1);
+        priceColIdx = norm.findIndex(c => c.includes('PRICE'));
+        totalColIdx = norm.findIndex(c => c === 'TOTAL' || c === 'AMOUNT');
+        if (priceColIdx < 0) priceColIdx = qi + 1;
+        if (totalColIdx < 0) totalColIdx = priceColIdx + 1;
+        break;
+      }
+      if (qtyColIdx < 0) continue; // no pricing table found on this tab
+
+      const updates = [];
+      const matchedTemplateRows = new Set();
+      for (const { item, qty } of gearData) {
+        // Build a deduplicated keyword list from both item name and templateRow.
+        // Require ALL significant keywords to appear in the cell (minMatch = all of them,
+        // up to 2) so "Park Banner Pack" never pollutes the "Name Banner" row, and
+        // "Silver Finalist Rings" never writes to the "Rings - Champs" row.
+        const allKWs   = [...new Set([
+          ...item.name.toLowerCase().split(' '),
+          ...item.templateRow.toLowerCase().split(' '),
+        ])].filter(w => w.length > 3);
+        const minMatch = Math.min(2, allKWs.length);
+
+        for (let ri = hdrRowIdx + 1; ri < rows.length; ri++) {
+          const rowText = (rows[ri] || []).map(c => String(c || '').toLowerCase().trim());
+          const nameMatch = rowText.some(c => c &&
+            (c === item.templateRow.toLowerCase() ||
+             allKWs.filter(w => c.includes(w)).length >= minMatch)
+          );
+          if (!nameMatch) continue;
+          matchedTemplateRows.add(item.templateRow);
+          const rn = ri + 1;
+          const qtyRange = `'${tabTitle}'!${colLetter(qtyColIdx)}${rn}`;
+          const existingQty = updates.find(u => u.range === qtyRange);
+          if (existingQty) {
+            existingQty.values[0][0] += qty;
+            // update total price too
+            if (item.unitPrice != null) {
+              const tRange = `'${tabTitle}'!${colLetter(totalColIdx)}${rn}`;
+              const existingT = updates.find(u => u.range === tRange);
+              if (existingT) existingT.values[0][0] += qty * item.unitPrice;
+            }
+          } else {
+            updates.push({ range: qtyRange, values: [[qty]] });
+            if (item.unitPrice != null) {
+              updates.push({ range: `'${tabTitle}'!${colLetter(priceColIdx)}${rn}`, values: [[item.unitPrice]] });
+              updates.push({ range: `'${tabTitle}'!${colLetter(totalColIdx)}${rn}`, values: [[qty * item.unitPrice]] });
+            }
+          }
+          break;
+        }
+      }
+
+      // For manual items with qty > 0 not found in the template, insert rows before TOTAL
+      const unmatchedManual = gearData.filter(({ item, qty }) =>
+        item.source === 'manual' && qty > 0 && !matchedTemplateRows.has(item.templateRow)
+      );
+      if (unmatchedManual.length > 0) {
+        let totalRowIdx = -1;
+        for (let ri = hdrRowIdx + 1; ri < rows.length; ri++) {
+          // TOTAL row may have text in any column (GEAR col is usually col B, not A)
+          const anyCell = (rows[ri] || []).some(c => {
+            const v = String(c || '').toUpperCase().trim();
+            return v === 'TOTAL' || v === 'GRAND TOTAL';
+          });
+          if (anyCell) { totalRowIdx = ri; break; }
+        }
+        if (totalRowIdx >= 0) {
+          const newTotalRowIdx = totalRowIdx + unmatchedManual.length; // 0-based after insert
+          const newTotalRn     = newTotalRowIdx + 1;                   // 1-indexed
+          const dataStartRn    = hdrRowIdx + 2;                        // 1-indexed first data row
+          const dataEndRn      = newTotalRn - 1;                       // 1-indexed last data row
+
+          // Insert rows + merge gear name cell + fix TOTAL SUM formulas
+          const insertRequests = [
+            { insertDimension: {
+              range: { sheetId, dimension: 'ROWS', startIndex: totalRowIdx, endIndex: totalRowIdx + unmatchedManual.length },
+              inheritFromBefore: true,
+            }},
+          ];
+          unmatchedManual.forEach((_, i) => {
+            insertRequests.push({ mergeCells: {
+              range: { sheetId, startRowIndex: totalRowIdx + i, endRowIndex: totalRowIdx + i + 1,
+                       startColumnIndex: gearColIdx, endColumnIndex: qtyColIdx },
+              mergeType: 'MERGE_ALL',
+            }});
+          });
+          await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, { requests: insertRequests });
+
+          // Write values for inserted rows
+          unmatchedManual.forEach(({ item, qty }, i) => {
+            const rn = totalRowIdx + 1 + i;
+            updates.push({ range: `'${tabTitle}'!${colLetter(gearColIdx)}${rn}`, values: [[item.name]] });
+            updates.push({ range: `'${tabTitle}'!${colLetter(qtyColIdx)}${rn}`, values: [[qty]] });
+            if (item.unitPrice != null) {
+              updates.push({ range: `'${tabTitle}'!${colLetter(priceColIdx)}${rn}`, values: [[item.unitPrice]] });
+              updates.push({ range: `'${tabTitle}'!${colLetter(totalColIdx)}${rn}`, values: [[qty * item.unitPrice]] });
+            }
+          });
+
+          // Fix TOTAL row SUM formulas to include the newly inserted rows
+          updates.push({
+            range: `'${tabTitle}'!${colLetter(qtyColIdx)}${newTotalRn}`,
+            values: [[`=SUM(${colLetter(qtyColIdx)}${dataStartRn}:${colLetter(qtyColIdx)}${dataEndRn})`]],
+          });
+          updates.push({
+            range: `'${tabTitle}'!${colLetter(totalColIdx)}${newTotalRn}`,
+            values: [[`=SUM(${colLetter(totalColIdx)}${dataStartRn}:${colLetter(totalColIdx)}${dataEndRn})`]],
+          });
+        }
+      }
+
+      if (updates.length) {
+        await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+          valueInputOption: 'USER_ENTERED',
+          data: updates,
+        });
+        // Apply currency format to price and total columns over the gear rows
+        const fmtEnd = hdrRowIdx + gearData.length + unmatchedManual.length + 3;
+        await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+          requests: [
+            currencyFmt(sheetId, hdrRowIdx + 1, fmtEnd, priceColIdx),
+            currencyFmt(sheetId, hdrRowIdx + 1, fmtEnd, totalColIdx),
+          ],
+        });
+      }
+    }
+  }
+}
+
+// Fill individual gear tabs from the registration sheet
+// fillType modes:
+//   full_table   (jerseys, hoodies) — reads L:AA; per-team rows with sizes + color
+//   sizes_only   (tees, jackets)    — reads E:F; two-column [size, qty] table
+//   single_total (caps)             — reads cell A2; one total number
+// dataRange on each GEAR_ITEM tells the exact source columns to read
+async function fillGearTabs(fileId) {
+  if (!sourceSheetId || !Object.keys(gearMapping).length) return;
+
+  const SIZE_SET = new Set(['AL', 'AM', 'AS', 'AXL', 'AXXL', 'A2XL', 'YL', 'YM', 'YXL']);
+
+  // Scan up to 50 rows for the first row containing ≥2 size-column labels
+  function findHeaderRowIdx(rows) {
+    for (let ri = 0; ri < Math.min(rows.length, 50); ri++) {
+      const norm = (rows[ri] || []).map(h => String(h || '').trim().toUpperCase());
+      if (norm.filter(h => SIZE_SET.has(h)).length >= 2) return ri;
+    }
+    return -1; // not found
+  }
+
+  const meta = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}?fields=sheets.properties(sheetId,title,gridProperties)`);
+
+  // Expand a tab's grid before writing so data never exceeds row/column limits.
+  // Preserves formatting — only adds rows/columns, never shrinks.
+  async function resizeIfNeeded(sheetId, rowsNeeded, colsNeeded) {
+    const sheet = meta.sheets.find(s => s.properties.sheetId === sheetId);
+    if (!sheet) return;
+    const gp    = sheet.properties.gridProperties || {};
+    const curR  = gp.rowCount    || 1000;
+    const curC  = gp.columnCount || 26;
+    if (rowsNeeded <= curR && colsNeeded <= curC) return;
+    const newR = Math.max(curR, rowsNeeded + 20);
+    const newC = Math.max(curC, colsNeeded + 5);
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+      requests: [{
+        updateSheetProperties: {
+          properties: { sheetId, gridProperties: { rowCount: newR, columnCount: newC } },
+          fields: 'gridProperties.rowCount,gridProperties.columnCount',
+        },
+      }],
+    });
+    gp.rowCount    = newR;
+    gp.columnCount = newC;
+  }
+
+  // Return {maxRow, maxCol} (1-indexed) across all update objects in the array
+  function maxDims(arr) {
+    let maxRow = 0, maxCol = 0;
+    for (const u of arr) {
+      const m = String(u.range || '').match(/!([A-Z]+)(\d+)/);
+      if (!m) continue;
+      let col = 0;
+      for (const c of m[1]) col = col * 26 + (c.charCodeAt(0) - 64);
+      const row = parseInt(m[2]) || 0;
+      const extraRows = u.values ? u.values.length - 1 : 0;
+      if (row + extraRows > maxRow) maxRow = row + extraRows;
+      if (col > maxCol) maxCol = col;
+    }
+    return { maxRow, maxCol };
+  }
+
+  for (const [gearName, sourceTab] of Object.entries(gearMapping)) {
+    const item = GEAR_ITEMS.find(g => g.name === gearName);
+    if (!item?.fillType) continue;
+
+    const keyword    = item.templateRow.toLowerCase().split(' ')[0].replace(/s$/, '');
+    const orderSheet = meta.sheets.find(s => s.properties.title.toLowerCase().includes(keyword));
+    if (!orderSheet) continue;
+    const orderTabTitle = orderSheet.properties.title;
+
+    // Build the source read range using dataRange (e.g. "L:AA", "E:F", "A2")
+    // Single-quote the tab title in case it contains spaces.
+    const srcRange = encodeURIComponent(`'${sourceTab.title}'!${item.dataRange || ''}`);
+
+    // ── single_total (caps: last number in totalCol = total qty) ─────────
+    if (item.fillType === 'single_total') {
+      const totalQty = await getGearTotal(sourceTab.title, item);
+
+      const orderData = await GET(
+        `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(orderTabTitle)}?majorDimension=ROWS`
+      );
+      const orderRows = orderData.values || [];
+
+      // Find the QTY column header and the gear-name row, then write at their intersection.
+      // Falls back to the row immediately below the QTY header if the gear name isn't found.
+      const gearKW = item.name.toUpperCase().replace(/S$/, ''); // "CAP"
+      let qtyHdrRow = -1, qtyHdrCol = -1, gearRowIdx = -1;
+
+      for (let ri = 0; ri < orderRows.length; ri++) {
+        for (let ci = 0; ci < (orderRows[ri] || []).length; ci++) {
+          const cell = String(orderRows[ri][ci] || '').trim().toUpperCase();
+          if ((cell === 'QTY' || cell === 'QUANTITY') && qtyHdrRow === -1) {
+            qtyHdrRow = ri; qtyHdrCol = ci;
+          }
+          if ((cell === gearKW || cell === gearKW + 'S' || cell.startsWith(gearKW)) && gearRowIdx === -1) {
+            gearRowIdx = ri;
+          }
+        }
+      }
+
+      let writeRange;
+      if (qtyHdrCol >= 0) {
+        const dataRow = (gearRowIdx > qtyHdrRow) ? gearRowIdx : qtyHdrRow + 1;
+        writeRange = `'${orderTabTitle}'!${colLetter(qtyHdrCol)}${dataRow + 1}`;
+        await resizeIfNeeded(orderSheet.properties.sheetId, dataRow + 1, qtyHdrCol + 1);
+      } else {
+        writeRange = `'${orderTabTitle}'!B2`;
+        await resizeIfNeeded(orderSheet.properties.sheetId, 2, 2);
+      }
+
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+        valueInputOption: 'RAW',
+        data: [{ range: writeRange, values: [[totalQty]] }],
+      });
+      continue;
+    }
+
+    // ── sizes_only (tees, jackets) — reads full source tab, auto-detects format ──
+    if (item.fillType === 'sizes_only') {
+      // Use explicit A:ZZ range (same proven format as full_table) to read all columns
+      const fullSrcRange = encodeURIComponent(`'${sourceTab.title}'!A:ZZ`);
+      const fullSrcRes = await GET(
+        `https://sheets.googleapis.com/v4/spreadsheets/${sourceSheetId}/values/${fullSrcRange}?majorDimension=ROWS`
+      );
+      const fullRows = fullSrcRes.values || [];
+      const sizeQtyMap = {};
+
+      // Try per-team format: find a header row where size labels appear as columns
+      const hdrIdx = findHeaderRowIdx(fullRows); // returns -1 if not found
+      if (hdrIdx >= 0) {
+        const hdrRow = (fullRows[hdrIdx] || []).map(h => String(h || '').trim().toUpperCase());
+        const sizeColIdx = {};
+        for (let ci = 0; ci < hdrRow.length; ci++) {
+          if (SIZE_SET.has(hdrRow[ci])) sizeColIdx[hdrRow[ci]] = ci;
+        }
+        // Sum each size column across all data rows after the header
+        for (let ri = hdrIdx + 1; ri < fullRows.length; ri++) {
+          const row   = fullRows[ri] || [];
+          const first = String(row[0] || '').trim().toLowerCase();
+          if (!first || first.includes('total') || first.includes('grand')) continue;
+          for (const [sz, ci] of Object.entries(sizeColIdx)) {
+            const qty = parseInt(row[ci]) || 0;
+            if (qty > 0) sizeQtyMap[sz] = (sizeQtyMap[sz] || 0) + qty;
+          }
+        }
+      }
+
+      // Fallback (or supplement): scan every row for a SIZE_SET label + adjacent number
+      // Handles simple "SIZE | QTY" summary tables
+      if (Object.keys(sizeQtyMap).length === 0) {
+        for (const row of fullRows) {
+          for (let ci = 0; ci < row.length; ci++) {
+            const label = String(row[ci] || '').trim().toUpperCase();
+            if (SIZE_SET.has(label)) {
+              const qty = parseInt(row[ci + 1]) || 0;
+              if (qty > 0) sizeQtyMap[label] = (sizeQtyMap[label] || 0) + qty;
+            }
+          }
+        }
+      }
+
+      console.log(`[sizes_only] ${gearName} → "${sourceTab.title}": hdrIdx=${hdrIdx}, rows=${fullRows.length}, found sizes:`, sizeQtyMap);
+
+      // Scan the order tab for SIZE_SET label cells and write qty in the next column
+      const orderData = await GET(
+        `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(orderTabTitle)}?majorDimension=ROWS`
+      );
+      const orderRows = orderData.values || [];
+      const sizeUpdates = [];
+      for (let ri = 0; ri < orderRows.length; ri++) {
+        for (let ci = 0; ci < (orderRows[ri] || []).length; ci++) {
+          const cell = String(orderRows[ri][ci] || '').trim().toUpperCase();
+          if (SIZE_SET.has(cell)) {
+            sizeUpdates.push({
+              range:  `'${orderTabTitle}'!${colLetter(ci + 1)}${ri + 1}`,
+              values: [[sizeQtyMap[cell] || 0]],
+            });
+          }
+        }
+      }
+
+      if (sizeUpdates.length > 0) {
+        const { maxRow, maxCol } = maxDims(sizeUpdates);
+        await resizeIfNeeded(orderSheet.properties.sheetId, maxRow, maxCol);
+        await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+          valueInputOption: 'RAW',
+          data: sizeUpdates,
+        });
+      }
+      continue;
+    }
+
+    // Read the specific column range from the source tab (full_table only)
+    const srcData = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${sourceSheetId}/values/${srcRange}?majorDimension=ROWS`
+    );
+    const srcRows = srcData.values || [];
+    if (srcRows.length < 2) continue;
+
+    // ── full_table (jerseys, hoodies) ─────────────────────────────────────
+    // Source: reads A:ZZ to handle any column layout (sizes may start at col B or col L).
+    // Template header: row 10 of order sheet tab (index 9).
+    // Strategy: find header row dynamically, match columns by name, write data.
+
+    // Find source header: first row with "MIDDLE SCHOOL" or ≥2 SIZE_SET values
+    let srcHdrIdx = -1;
+    for (let ri = 0; ri < Math.min(srcRows.length, 50); ri++) {
+      const norm = (srcRows[ri] || []).map(h => String(h || '').trim().toUpperCase());
+      if (norm.some(h => h === 'MIDDLE SCHOOL') || norm.filter(h => SIZE_SET.has(h)).length >= 2) {
+        srcHdrIdx = ri; break;
+      }
+    }
+    if (srcHdrIdx < 0) { console.warn(`[full_table] ${gearName}: no header row found, skipping`); continue; }
+    const srcHeader = srcRows[srcHdrIdx].map(h => String(h || '').trim().toUpperCase());
+
+    // Column index for team name (used for row filtering and TOTAL label)
+    const teamColIdx = srcHeader.indexOf('MIDDLE SCHOOL');
+
+    // Fetch hyperlinks + formula values so links are preserved
+    const rawRange = `'${sourceTab.title}'!${item.dataRange}`;
+    const linkResp = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${sourceSheetId}?ranges=${encodeURIComponent(rawRange)}&fields=sheets(data(rowData(values(hyperlink,userEnteredValue/formulaValue))))&includeGridData=true`
+    );
+    const linkData    = (linkResp.sheets?.[0]?.data?.[0]?.rowData) || [];
+    const linkRows    = linkData.map(r => (r.values || []).map(c => c.hyperlink || null));
+    const formulaRows = linkData.map(r => (r.values || []).map(c => c.userEnteredValue?.formulaValue || null));
+
+    function srcCell(ri, ci) {
+      const val     = String((srcRows[ri] || [])[ci] || '').trim();
+      let link      = (linkRows[ri] || [])[ci];
+      const formula = (formulaRows[ri] || [])[ci] || '';
+      if (!link && /^=HYPERLINK\(/i.test(formula)) {
+        const m = formula.match(/=HYPERLINK\("([^"]+)"/i);
+        if (m) link = m[1];
+      }
+      if (link && val) return `=HYPERLINK("${link.replace(/"/g,'""')}","${val.replace(/"/g,'""')}")`;
+      return val;
+    }
+
+    // Collect data rows, keeping original source index for hyperlink lookup
+    const checkColIdx = teamColIdx >= 0 ? teamColIdx : 0;
+    const dataRows = [];
+    for (let ri = srcHdrIdx + 1; ri < srcRows.length; ri++) {
+      const row   = srcRows[ri] || [];
+      const first = String(row[checkColIdx] || '').trim().toLowerCase();
+      if (first && !first.includes('grand total') && first !== 'total') {
+        dataRows.push({ row, ri });
+      }
+    }
+
+    // Read the order sheet tab; template header is at row 10 (index 9)
+    const orderData = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(orderTabTitle)}?majorDimension=ROWS`
+    );
+    const orderRows = orderData.values || [];
+    const tplHdrIdx = orderRows.length > 9 ? 9 : 0;
+    const tplHeader = (orderRows[tplHdrIdx] || []).map(h => String(h || '').trim().toUpperCase());
+
+    // Map: source column index → template column index (matched by header name)
+    const srcToTpl = {};
+    srcHeader.forEach((h, si) => {
+      if (!h) return;
+      const ti = tplHeader.indexOf(h);
+      if (ti >= 0) srcToTpl[si] = ti;
+    });
+
+    console.log(`[full_table] ${gearName} → "${sourceTab.title}": hdrIdx=${srcHdrIdx}, teamCol=${teamColIdx}, rows=${dataRows.length}, mapped cols:`, Object.keys(srcToTpl).length);
+
+    const updates      = [];
+    const dataStartRow = tplHdrIdx + 2; // 1-indexed row right after template header
+
+    dataRows.forEach(({ row, ri: absRi }, i) => {
+      const rowNum = dataStartRow + i;
+      srcHeader.forEach((h, si) => {
+        if (!(si in srcToTpl)) return;
+        updates.push({
+          range:  `'${orderTabTitle}'!${colLetter(srcToTpl[si])}${rowNum}`,
+          values: [[srcCell(absRi, si)]],
+        });
+      });
+    });
+
+    // Grand total row — sum every numeric column
+    if (dataRows.length > 0) {
+      const totalRowNum = dataStartRow + dataRows.length;
+      const teamTplCI   = srcToTpl[teamColIdx >= 0 ? teamColIdx : checkColIdx] ?? 0;
+      updates.push({ range: `'${orderTabTitle}'!${colLetter(teamTplCI)}${totalRowNum}`, values: [['TOTAL']] });
+      srcHeader.forEach((h, si) => {
+        if (si === teamColIdx || !(si in srcToTpl)) return;
+        const colTotal = dataRows.reduce((s, { row }) => s + (parseInt(row[si]) || 0), 0);
+        if (colTotal > 0) {
+          updates.push({ range: `'${orderTabTitle}'!${colLetter(srcToTpl[si])}${totalRowNum}`, values: [[colTotal]] });
+        }
+      });
+    }
+
+    if (updates.length) {
+      const { maxRow, maxCol } = maxDims(updates);
+      await resizeIfNeeded(orderSheet.properties.sheetId, maxRow, maxCol);
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+        valueInputOption: 'USER_ENTERED',
+        data: updates,
+      });
+
+      // Format the TOTAL row with red background + white bold text
+      if (dataRows.length > 0) {
+        const totalRowIdx = (tplHdrIdx + 2 + dataRows.length) - 1; // 0-indexed
+        const tplCols     = Object.values(srcToTpl);
+        const minC = Math.min(...tplCols);
+        const maxC = Math.max(...tplCols) + 1;
+        await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+          requests: [{
+            repeatCell: {
+              range: {
+                sheetId:          orderSheet.properties.sheetId,
+                startRowIndex:    totalRowIdx,
+                endRowIndex:      totalRowIdx + 1,
+                startColumnIndex: minC,
+                endColumnIndex:   maxC,
+              },
+              cell: {
+                userEnteredFormat: {
+                  backgroundColor: { red: 0.545, green: 0.102, blue: 0.102 },
+                  textFormat: { bold: true, foregroundColor: { red: 1, green: 1, blue: 1 } },
+                },
+              },
+              fields: 'userEnteredFormat(backgroundColor,textFormat)',
+            },
+          }],
+        });
+      }
+    }
+  }
+}
+
+// Write ship-to and order header fields by scanning tabs for label cells
+async function fillShipTo(fileId, sheets, fields) {
+  // label → value to write in the NEXT non-empty-looking cell to the right
+  // Only scan first 20 rows (header area) to avoid false matches on gear rows
+  const LABEL_MAP = [
+    { labels: ['order date', 'date'],      value: fields.orderDate, writeBelow: true,  isDate: true },
+    { labels: ['name'],                    value: fields.shipName,  skipIfContains: ['banner','chain','ring','hype','team','middle','school'] },
+    { labels: ['address'],                 value: fields.shipAddr,  skipIfContains: ['banner','chain','ring','hype'] },
+    { labels: ['contact number','contact'],value: fields.shipPhone },
+    { labels: ['email'],                   value: fields.shipEmail, skipIfContains: ['banner','chain','ring','hype'] },
+    { labels: ['eta'],                     value: fields.eta,       writeBelow: true,  isDate: true },
+  ];
+
+  const dateUpdates = [];  // values:batchUpdate USER_ENTERED — parses date strings correctly
+  const cellRequests = []; // spreadsheets:batchUpdate UpdateCellsRequest — sets stringValue explicitly, never interpreted as formula
+
+  for (const sheet of sheets) {
+    const tabTitle  = sheet.properties.title;
+    const sheetData = await GET(
+      `https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values/${encodeURIComponent(tabTitle)}?majorDimension=ROWS`
+    );
+    const rows = (sheetData.values || []).slice(0, 20); // header area only
+
+    for (let ri = 0; ri < rows.length; ri++) {
+      const row = rows[ri] || [];
+      for (let ci = 0; ci < row.length; ci++) {
+        const cell = String(row[ci] || '').toLowerCase().trim();
+        if (!cell) continue;
+
+        for (const entry of LABEL_MAP) {
+          if (!entry.value) continue;
+          const matched = entry.labels.some(lbl => cell === lbl || cell.startsWith(lbl));
+          if (!matched) continue;
+
+          const skip = entry.skipIfContains?.some(kw => cell.includes(kw));
+          if (skip) continue;
+
+          const writeRow = entry.writeBelow ? ri + 2 : ri + 1;
+          let writeCol = entry.writeBelow ? ci : ci + 1;
+          // Advance past empty cells (up to 3) to find the actual value cell
+          if (!entry.writeBelow) {
+            while (writeCol < ci + 4 && writeCol < row.length && String(row[writeCol] || '').trim() === '') writeCol++;
+          }
+
+          if (entry.isDate) {
+            dateUpdates.push({ range: `'${tabTitle}'!${colLetter(writeCol)}${writeRow}`, values: [[entry.value]] });
+          } else {
+            cellRequests.push({
+              updateCells: {
+                range: {
+                  sheetId: sheet.properties.sheetId,
+                  startRowIndex: writeRow - 1,
+                  endRowIndex: writeRow,
+                  startColumnIndex: writeCol,
+                  endColumnIndex: writeCol + 1,
+                },
+                rows: [{ values: [{ userEnteredValue: { stringValue: String(entry.value) } }] }],
+                fields: 'userEnteredValue',
+              },
+            });
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  if (dateUpdates.length) {
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+      valueInputOption: 'USER_ENTERED',
+      data: dateUpdates,
+    });
+  }
+  if (cellRequests.length) {
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+      requests: cellRequests,
+    });
+  }
+}
+
+function colLetter(idx) {
+  // supports A-Z and AA-AZ
+  if (idx < 26) return String.fromCharCode(65 + idx);
+  return String.fromCharCode(64 + Math.floor(idx / 26)) + String.fromCharCode(65 + (idx % 26));
+}
+
+// ── Tab loading ───────────────────────────────────────────────────────────────
+
+const EXCLUDED_TAB_KEYWORDS = ['instruction', 'color code', 'msm digital catalog', 'version'];
+
+function isExcludedTab(title) {
+  const t = title.toLowerCase();
+  return EXCLUDED_TAB_KEYWORDS.some(kw => t.includes(kw));
+}
+
+// Ensure every tab's "MSM Digital Catalog" hyperlink matches the one on the jerseys tab.
+// The template sometimes has stale URLs on non-jersey tabs.
+async function fixCatalogLinks(fileId) {
+  // Read all sheets with grid data to find hyperlinks
+  const resp = await GET(
+    `https://sheets.googleapis.com/v4/spreadsheets/${fileId}?includeGridData=true&fields=sheets(properties(sheetId,title),data(rowData(values(formattedValue,hyperlink,userEnteredValue/formulaValue))))`
+  );
+  const sheets = resp.sheets || [];
+
+  // Find the correct URL from the jerseys tab
+  let correctUrl = null;
+  const jerseySheet = sheets.find(s => s.properties.title.toLowerCase().includes('jersey'));
+  if (jerseySheet) {
+    outer: for (const row of (jerseySheet.data?.[0]?.rowData || [])) {
+      for (const cell of (row.values || [])) {
+        const text = (cell.formattedValue || '').toLowerCase();
+        if (text.includes('digital catalog') && cell.hyperlink) {
+          correctUrl = cell.hyperlink;
+          break outer;
+        }
+      }
+    }
+  }
+  if (!correctUrl) return; // nothing to fix
+
+  // Build update requests for every tab that has a "digital catalog" cell with a different URL
+  const requests = [];
+  for (const sheet of sheets) {
+    const sheetId = sheet.properties.sheetId;
+    const rows = sheet.data?.[0]?.rowData || [];
+    for (let ri = 0; ri < rows.length; ri++) {
+      const cells = rows[ri].values || [];
+      for (let ci = 0; ci < cells.length; ci++) {
+        const cell = cells[ci];
+        const text = cell.formattedValue || '';
+        if (!text.toLowerCase().includes('digital catalog')) continue;
+        // Normalize link to match jerseys tab
+        const formula = cell.userEnteredValue?.formulaValue || '';
+        const currentLink = cell.hyperlink ||
+          (formula.match(/=HYPERLINK\("([^"]+)"/i)?.[1]) || '';
+        if (currentLink === correctUrl) continue; // already correct
+        requests.push({
+          updateCells: {
+            rows: [{ values: [{ userEnteredValue: {
+              formulaValue: `=HYPERLINK("${correctUrl}","${text.replace(/"/g, '""')}")`,
+            }}] }],
+            fields: 'userEnteredValue',
+            range: { sheetId, startRowIndex: ri, endRowIndex: ri + 1, startColumnIndex: ci, endColumnIndex: ci + 1 },
+          },
+        });
+      }
+    }
+  }
+  if (requests.length > 0) {
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, { requests });
+  }
+}
+
+async function loadTemplateTabs() {
+  templateId = resolveTemplateId();
+  const btn = document.getElementById('load-tabs-btn');
+  btn.textContent = 'Loading…'; btn.disabled = true;
+  try {
+    const data = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${templateId}?fields=sheets.properties`);
+    allTabs      = data.sheets
+      .map(s => ({ id: s.properties.sheetId, title: s.properties.title }))
+      .filter(t => !isExcludedTab(t.title));
+    selectedTabs = new Set(allTabs.map(t => t.id));
+    renderTabs();
+    btn.textContent = '↺ Reload';
+  } catch (e) {
+    document.getElementById('tabs-container').innerHTML =
+      `<p class="text-red-500">Could not load tabs: ${escHtml(e.message)}</p>`;
+    btn.textContent = 'Retry';
+  }
+  btn.disabled = false;
+}
+
+function renderTabs() {
+  const c = document.getElementById('tabs-container');
+  if (!allTabs.length) { c.innerHTML = '<p class="text-gray-400 italic">No tabs found</p>'; return; }
+  c.innerHTML = `
+    <div class="flex gap-3 mb-3">
+      <button onclick="selectAll(true)"  class="text-xs text-[#1a2b6b] hover:underline">Select all</button>
+      <span class="text-gray-300">|</span>
+      <button onclick="selectAll(false)" class="text-xs text-[#1a2b6b] hover:underline">Deselect all</button>
+    </div>
+    <div class="space-y-2">
+      ${allTabs.map(tab => `
+        <label class="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer select-none">
+          <input type="checkbox" class="w-4 h-4 rounded text-[#1a2b6b] accent-[#1a2b6b]"
+                 data-id="${tab.id}" ${selectedTabs.has(tab.id) ? 'checked' : ''}
+                 onchange="toggleTab(${tab.id}, this.checked)">
+          <span class="text-sm text-gray-700">${escHtml(tab.title)}</span>
+        </label>
+      `).join('')}
+    </div>`;
+}
+
+function toggleTab(id, checked) { checked ? selectedTabs.add(id) : selectedTabs.delete(id); }
+function selectAll(v) { selectedTabs = v ? new Set(allTabs.map(t => t.id)) : new Set(); renderTabs(); }
+
+// ── Order summary ─────────────────────────────────────────────────────────────
+
+// resolvedQtyMap: optional { [templateRow]: qty } from fillQuantities after sheet creation.
+// When provided, auto items show real numbers instead of "auto".
+function updateSummary(resolvedQtyMap) {
+  const tbody = document.getElementById('summary-body');
+  if (!tbody) return;
+
+  let grandTotal = 0;
+  let grandHasAuto = false;
+
+  const rows = GEAR_ITEMS.map(item => {
+    let qty, qtyDisplay;
+    if (item.source === 'manual') {
+      qty = parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0;
+      qtyDisplay = qty;
+    } else if (resolvedQtyMap && item.templateRow in resolvedQtyMap) {
+      qty = resolvedQtyMap[item.templateRow] || 0;
+      qtyDisplay = qty;
+    } else {
+      qty = null;
+      qtyDisplay = null;
+      grandHasAuto = true;
+    }
+
+    const price = item.unitPrice;
+    const total = (qty !== null && price !== null) ? qty * price : null;
+    if (total !== null) grandTotal += total;
+
+    return `
+      <tr class="hover:bg-gray-50">
+        <td class="py-2 px-3 text-gray-700">${escHtml(item.name)}</td>
+        <td class="py-2 px-3 text-right ${qtyDisplay === null ? 'text-gray-400 italic text-xs' : 'text-gray-700'}">
+          ${qtyDisplay !== null ? qtyDisplay : 'auto'}
+        </td>
+        <td class="py-2 px-3 text-right text-gray-500">
+          ${price !== null ? '$' + price.toFixed(2) : '—'}
+        </td>
+        <td class="py-2 px-3 text-right font-medium text-[#1a2b6b]">
+          ${total !== null ? '$' + total.toFixed(2) : (qtyDisplay === null ? '<span class="text-gray-400 italic text-xs font-normal">auto</span>' : '—')}
+        </td>
+      </tr>`;
+  });
+
+  tbody.innerHTML = rows.join('');
+
+  const gtEl = document.getElementById('summary-grand-total');
+  gtEl.innerHTML = grandTotal > 0
+    ? `$${grandTotal.toFixed(2)}${grandHasAuto ? '<span class="text-gray-400 text-xs font-normal"> + auto</span>' : ''}`
+    : '—';
+}
+
+// ── Recent folders ────────────────────────────────────────────────────────────
+
+async function loadRecentFolders() {
+  try {
+    const data = await GET(
+      `https://www.googleapis.com/drive/v3/files?q=mimeType%3D'application%2Fvnd.google-apps.folder'&orderBy=viewedByMeTime+desc&pageSize=6&fields=files(id,name)`
+    );
+    if (!data.files?.length) return;
+    const div = document.getElementById('recent-folders');
+    div.innerHTML = `
+      <p class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Recent folders</p>
+      <div class="flex flex-wrap gap-2">
+        ${data.files.map(f => `
+          <button onclick="pickFolder('${escAttr(f.id)}', '${escAttr(f.name)}')"
+                  class="text-xs bg-gray-100 hover:bg-[#f0f4ff] hover:text-[#162059] text-gray-600 px-3 py-1.5 rounded-full transition border border-transparent hover:border-[#c7d0f0]">
+            ${escHtml(f.name)}
+          </button>`).join('')}
+      </div>`;
+  } catch (_) { /* non-critical */ }
+}
+
+function pickFolder(id, name) {
+  document.getElementById('folder-input').value = id;
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function extractFolderId(raw) {
+  if (!raw) return null;
+  const m = raw.match(/folders\/([a-zA-Z0-9_-]+)/);
+  return m ? m[1] : raw.trim();
+}
+
+function normalizePhone(raw) {
+  const digits = String(raw || '').replace(/\D/g, '');
+  const d = digits.length >= 10 ? digits.slice(-10) : digits;
+  if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+  return raw;
+}
+
+// ── Create sheet ──────────────────────────────────────────────────────────────
+
+async function createOrderSheet() {
+  const market     = v('market');
+  const year       = v('year');
+  const season     = v('season');
+  const sport      = v('sport');
+  const orderNum   = v('order-num');
+  const orderDate  = v('order-date');
+  const eta        = v('eta');
+  const shipName   = v('ship-name');
+  const shipAddr   = v('ship-address');
+  const shipPhone  = normalizePhone(v('ship-phone'));
+  const shipEmail  = v('ship-email');
+  const folderRaw    = v('folder-input');
+  const ownerEmail   = v('owner-email');
+  const sponsorType  = v('sponsor-type') || 'None';
+  const sponsorFile  = document.getElementById('sponsor-logo').files[0] || null;
+  const sponsorLogoDataUrl = (sponsorType !== 'None' && sponsorFile)
+    ? await readFileAsDataURL(sponsorFile) : null;
+
+  if (!market || !year || !season)                          { showStatus('Fill in Market, Year, and Season', 'error'); return; }
+  if (!shipName || !shipAddr || !shipPhone || !shipEmail)   { showStatus('Fill in all Ship To fields', 'error'); return; }
+  if (!allTabs.length)                                      { showStatus('Load template tabs first', 'error'); return; }
+  if (!selectedTabs.size)                                   { showStatus('Select at least one tab', 'error'); return; }
+
+  const btn = document.getElementById('create-btn');
+  btn.disabled = true; btn.textContent = 'Working…';
+
+  try {
+    const sportPart = sport ? ` ${sport.toUpperCase()}` : '';
+    const fileName = orderNum
+      ? `${market.toUpperCase()} ${year} ${season.toUpperCase()}${sportPart} ORDER #${orderNum}`
+      : `${market.toUpperCase()} ${year} ${season.toUpperCase()}${sportPart} ORDER`;
+    const folderId = extractFolderId(folderRaw);
+
+    // 1. Copy template (baseball/softball → DEFAULT_TEMPLATE, all other sports → NON_BASEBALL_TEMPLATE)
+    showStatus('Copying template…', 'info');
+    templateId = resolveTemplateId();
+    const copyBody = { name: fileName };
+    if (folderId) copyBody.parents = [folderId];
+    const copied = await POST(
+      `https://www.googleapis.com/drive/v3/files/${templateId}/copy`,
+      copyBody
+    );
+    const fileId = copied.id;
+
+    // 2. Delete unselected + excluded tabs
+    // NOTE: Google assigns NEW sheetIds when copying — must match by TITLE, not by ID.
+    const copyMeta    = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}?fields=sheets.properties`);
+    const keepTitles  = new Set(allTabs.filter(t => selectedTabs.has(t.id)).map(t => t.title));
+    const toDelete    = copyMeta.sheets.filter(s => !keepTitles.has(s.properties.title));
+
+    if (toDelete.length) {
+      showStatus('Removing unneeded tabs…', 'info');
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: toDelete.map(s => ({ deleteSheet: { sheetId: s.properties.sheetId } })),
+      });
+    }
+
+    // Refresh meta after deletions — these are the real sheetIds in the copy
+    const finalMeta   = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}?fields=sheets.properties`);
+    const copySheetIds = finalMeta.sheets.map(s => s.properties.sheetId);
+
+    // 3. Fill placeholders via findReplace (for bracketed tokens in the template)
+    showStatus('Filling in order details…', 'info');
+    const replacements = [
+      ['[MARKET]',        market.toUpperCase()],
+      ['[YEAR]',          year],
+      ['[SEASON]',        season.toUpperCase()],
+      ['[SPORT]',         (sport || '').toUpperCase()],
+      ['[ORDER#]',        orderNum],
+      ['[DATE]',          orderDate],
+      ['[ETA]',           eta],
+      ['(000) 000 0000',  shipPhone],
+    ].filter(([, val]) => val);
+
+    // If sport is set, insert it into the title cell which has no [SPORT] placeholder.
+    // After the above replacements run, the title reads "[MARKET] [YEAR] [SEASON] ORDER [#]…"
+    // → find that exact string and insert sport before ORDER.
+    if (sport) {
+      const baseTitle = `${market.toUpperCase()} ${year} ${season.toUpperCase()} ORDER`;
+      const fullTitle = `${market.toUpperCase()} ${year} ${season.toUpperCase()} ${sport.toUpperCase()} ORDER`;
+      replacements.push([baseTitle, fullTitle]);
+    }
+
+    if (replacements.length) {
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: replacements.map(([find, replacement]) => ({
+          findReplace: { find, replacement, allSheets: true, matchEntireCell: false },
+        })),
+      });
+    }
+
+    // 3b. Second pass for phone — target formula cells like =(000) 000 0000 which render as #ERROR!
+    // includeFormulas searches the raw formula string; wrapping replacement in quotes makes it a string literal.
+    if (shipPhone) {
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: [{ findReplace: {
+          find: '(000) 000 0000',
+          replacement: `"${shipPhone}"`,
+          allSheets: true,
+          matchEntireCell: false,
+          includeFormulas: true,
+        }}],
+      });
+    }
+
+    // 3c. Write ship-to fields — only scan non-gear tabs to avoid false label matches
+    showStatus('Writing ship-to details…', 'info');
+    const GEAR_TAB_KWS = ['jersey', 'hoodie', 'tee', 'jacket', 'cap', 'ring', 'chain', 'banner'];
+    const homeTabSheets = finalMeta.sheets.filter(s =>
+      !GEAR_TAB_KWS.some(kw => s.properties.title.toLowerCase().includes(kw))
+    );
+    await fillShipTo(fileId, homeTabSheets, { shipName, shipAddr, shipPhone, shipEmail, orderDate, eta });
+
+    // 4. Fill gear tabs (per-team table for jerseys/hoodies, size totals for caps/tees/jackets)
+    showStatus('Filling gear tabs…', 'info');
+    await fillGearTabs(fileId);
+
+    // 4a. Normalize "MSM Digital Catalog" hyperlinks — copy correct URL from jerseys tab to all tabs
+    showStatus('Fixing catalog links…', 'info');
+    await fixCatalogLinks(fileId);
+
+    // 4b. Pull overall quantities + manual entries into the order home tab
+    showStatus('Filling quantities…', 'info');
+    const resolvedQty = await fillQuantities(fileId);
+
+    // 4c. Fill summary tab
+    showStatus('Writing summary…', 'info');
+    await fillSummaryTab(fileId, resolvedQty);
+
+    // 4d. Add Sponsor Logo tab — upload logo to Drive, share publicly, embed via =IMAGE()
+    if (sponsorLogoDataUrl) {
+      showStatus('Uploading sponsor logo…', 'info');
+      const logoMime  = sponsorLogoDataUrl.split(';')[0].split(':')[1] || 'image/png';
+      const logoB64   = sponsorLogoDataUrl.split(',')[1];
+      const logoName  = sponsorFile?.name || 'sponsor-logo.png';
+      const boundary  = 'MSM_LOGO_' + Date.now();
+      const uploadMeta = { name: logoName, ...(folderId ? { parents: [folderId] } : {}) };
+      const uploadBody = [
+        `--${boundary}`,
+        'Content-Type: application/json; charset=UTF-8', '',
+        JSON.stringify(uploadMeta),
+        `--${boundary}`,
+        `Content-Type: ${logoMime}`,
+        'Content-Transfer-Encoding: base64', '',
+        logoB64,
+        `--${boundary}--`,
+      ].join('\r\n');
+
+      const uploadRes = await fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+        { method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': `multipart/related; boundary=${boundary}` }, body: uploadBody }
+      );
+      const logoFileData = await uploadRes.json();
+      if (!uploadRes.ok) throw new Error(logoFileData?.error?.message || 'Logo upload failed');
+      const logoFileId = logoFileData.id;
+
+      // Share as "anyone with link can view" — used for the download link only
+      await fetch(`https://www.googleapis.com/drive/v3/files/${logoFileId}/permissions`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: 'reader', type: 'anyone' }),
+      });
+
+      // Add Sponsor Logo tab
+      showStatus('Adding sponsor logo tab…', 'info');
+      const addSheetResp = await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: [{ addSheet: { properties: { title: 'Sponsor Logo' } } }],
+      });
+      const logoSheetId = addSheetResp.replies[0].addSheet.properties.sheetId;
+      // intentionally NOT added to copySheetIds — keep unlocked so hyperlink is clickable
+
+      // Write label in A1, image in A2 (no download link via formula — use textFormatRuns instead)
+      const imageUrl = `https://drive.google.com/thumbnail?id=${logoFileId}&sz=w800`;
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}/values:batchUpdate`, {
+        valueInputOption: 'USER_ENTERED',
+        data: [{ range: `'Sponsor Logo'!A1:A2`, values: [
+          [`Sponsor Logo — ${sponsorType}`],
+          [`=IMAGE("${imageUrl}", 4, 300, 500)`],
+        ]}],
+      });
+
+      // Style + resize + real clickable hyperlink via textFormatRuns (not =HYPERLINK formula)
+      const downloadUrl = `https://drive.google.com/uc?id=${logoFileId}&export=download`;
+      await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+        requests: [
+          {
+            updateDimensionProperties: {
+              range: { sheetId: logoSheetId, dimension: 'ROWS', startIndex: 1, endIndex: 2 },
+              properties: { pixelSize: 310 },
+              fields: 'pixelSize',
+            },
+          },
+          {
+            updateDimensionProperties: {
+              range: { sheetId: logoSheetId, dimension: 'COLUMNS', startIndex: 0, endIndex: 1 },
+              properties: { pixelSize: 520 },
+              fields: 'pixelSize',
+            },
+          },
+          {
+            repeatCell: {
+              range: { sheetId: logoSheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: 1 },
+              cell: { userEnteredFormat: { textFormat: { bold: true, fontSize: 14 } } },
+              fields: 'userEnteredFormat.textFormat',
+            },
+          },
+          {
+            // Real hyperlink on A4 text — directly clickable (no formula needed)
+            updateCells: {
+              rows: [{
+                values: [{
+                  userEnteredValue: { stringValue: 'Click to download sponsor logo' },
+                  textFormatRuns: [{
+                    startIndex: 0,
+                    format: {
+                      link: { uri: downloadUrl },
+                      foregroundColor: { red: 0.1, green: 0.2, blue: 0.8 },
+                      bold: true,
+                      underline: true,
+                    },
+                  }],
+                }],
+              }],
+              fields: 'userEnteredValue,textFormatRuns',
+              range: { sheetId: logoSheetId, startRowIndex: 3, endRowIndex: 4, startColumnIndex: 0, endColumnIndex: 1 },
+            },
+          },
+        ],
+      });
+    }
+
+    // 5. Lock all remaining tabs using the COPY's actual sheetIds
+    showStatus('Locking tabs…', 'info');
+    await POST(`https://sheets.googleapis.com/v4/spreadsheets/${fileId}:batchUpdate`, {
+      requests: copySheetIds.map(sheetId => ({
+        addProtectedRange: {
+          protectedRange: {
+            range: { sheetId },
+            description: 'Locked',
+            warningOnly: false,
+            editors: { users: [], groups: [], domainUsersCanEdit: false },
+          },
+        },
+      })),
+    });
+
+    // 6. Transfer ownership
+    if (ownerEmail) {
+      showStatus('Transferring ownership…', 'info');
+      await POST(
+        `https://www.googleapis.com/drive/v3/files/${fileId}/permissions?transferOwnership=true&sendNotificationEmail=true`,
+        { role: 'owner', type: 'user', emailAddress: ownerEmail }
+      );
+    }
+
+    // Update the on-page order summary with the real resolved quantities
+    if (resolvedQty?.qtyMap) updateSummary(resolvedQty.qtyMap);
+
+    // Store order data for the Submit Order email
+    lastOrderData = { fileName, fileId, market, year, season, sport, orderNum, orderDate, eta,
+                      shipName, shipAddr, shipPhone, shipEmail, resolvedQty,
+                      sponsorType, sponsorLogoDataUrl, sponsorLogoName: sponsorFile?.name || null };
+
+    const url = `https://docs.google.com/spreadsheets/d/${fileId}/edit`;
+    showStatus(`
+      <div class="text-center py-2">
+        <div class="text-green-700 font-semibold text-base mb-3">✓ "${fileName}" created!</div>
+        <div class="flex gap-3 justify-center flex-wrap">
+          <a href="${url}" target="_blank"
+             class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition font-medium text-sm">
+            Open in Google Sheets ↗
+          </a>
+          <button id="submit-order-btn" onclick="submitOrder()"
+                  class="inline-block bg-[#1a2b6b] text-white px-6 py-2 rounded-lg hover:bg-[#152257] transition font-medium text-sm">
+            Submit Order (Send Email)
+          </button>
+        </div>
+      </div>`, 'success');
+
+  } catch (err) {
+    let msg = err.message;
+    try { msg = JSON.parse(msg).error?.message || msg; } catch (_) {}
+    showStatus('Error: ' + msg, 'error');
+  }
+
+  btn.disabled = false; btn.textContent = 'Create Order Sheet';
+}
+
+// ── Submit Order (email) ──────────────────────────────────────────────────────
+
+async function submitOrder() {
+  if (!lastOrderData) return;
+  const btn = document.getElementById('submit-order-btn');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const { fileName, fileId, market, year, season, sport, orderNum, orderDate, eta,
+          shipName, shipAddr, shipPhone, shipEmail, resolvedQty,
+          sponsorType, sponsorLogoDataUrl, sponsorLogoName } = lastOrderData;
+
+  const qtyMap = resolvedQty?.qtyMap || {};
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${fileId}/edit`;
+
+  // Build order summary rows
+  let tableRows = '';
+  let grandTotal = 0;
+  for (const item of GEAR_ITEMS) {
+    const qty = item.source === 'manual'
+      ? (parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0)
+      : (qtyMap[item.templateRow] || 0);
+    const total = qty * (item.unitPrice || 0);
+    grandTotal += total;
+    tableRows += `
+      <tr>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;">${item.name}</td>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;text-align:right;">${qty}</td>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;text-align:right;">$${(item.unitPrice || 0).toFixed(2)}</td>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;text-align:right;">$${total.toFixed(2)}</td>
+      </tr>`;
+  }
+
+  const htmlBody = `
+    <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;color:#222;">
+      <div style="background:#1a2b6b;padding:20px 24px;border-radius:8px 8px 0 0;">
+        <h2 style="color:#fff;margin:0;font-size:18px;">MSM Order Submitted</h2>
+        <p style="color:#c7d0f0;margin:4px 0 0;font-size:13px;">${fileName}</p>
+      </div>
+      <div style="background:#f8f9ff;padding:20px 24px;border:1px solid #dde3f5;border-top:none;">
+
+        <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+          <tr><td style="padding:3px 0;color:#555;width:110px;">Market</td><td style="font-weight:600;">${market}</td></tr>
+          <tr><td style="padding:3px 0;color:#555;">Season</td><td>${year} ${season}${sport ? ' – ' + sport : ''}</td></tr>
+          ${orderNum ? `<tr><td style="padding:3px 0;color:#555;">Order #</td><td>${orderNum}</td></tr>` : ''}
+          <tr><td style="padding:3px 0;color:#555;">Order Date</td><td>${orderDate}</td></tr>
+          <tr><td style="padding:3px 0;color:#555;">ETA</td><td>${eta}</td></tr>
+          ${sponsorType && sponsorType !== 'None' ? `<tr><td style="padding:3px 0;color:#555;">Sponsor Logo</td><td>${sponsorType} <span style="color:#888;font-size:12px;">(logo attached)</span></td></tr>` : ''}
+        </table>
+
+        <p style="font-weight:700;color:#1a2b6b;margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;">Ship To</p>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px;">
+          <tr><td style="padding:3px 0;color:#555;width:110px;">Name</td><td>${shipName}</td></tr>
+          <tr><td style="padding:3px 0;color:#555;">Address</td><td>${shipAddr}</td></tr>
+          <tr><td style="padding:3px 0;color:#555;">Phone</td><td>${shipPhone}</td></tr>
+          <tr><td style="padding:3px 0;color:#555;">Email</td><td>${shipEmail}</td></tr>
+        </table>
+
+        <p style="font-weight:700;color:#1a2b6b;margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;">Order Summary</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <tr style="background:#1a2b6b;color:#fff;">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;">Gear</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:600;">QTY</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:600;">Unit Price</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:600;">Total</th>
+          </tr>
+          ${tableRows}
+          <tr style="background:#8b1a1a;color:#fff;font-weight:700;">
+            <td style="padding:8px 12px;" colspan="3">GRAND TOTAL</td>
+            <td style="padding:8px 12px;text-align:right;">$${grandTotal.toFixed(2)}</td>
+          </tr>
+        </table>
+
+        <p style="margin-top:20px;font-size:13px;">
+          <a href="${sheetUrl}" style="color:#1a2b6b;font-weight:600;">View Order Sheet in Google Sheets →</a>
+        </p>
+      </div>
+    </div>`;
+
+  const subject = `MSM Order Submitted: ${fileName}`;
+  const htmlB64 = btoa(unescape(encodeURIComponent(htmlBody)));
+
+  let raw;
+  if (sponsorLogoDataUrl) {
+    // Multipart email with logo attachment
+    const boundary = 'MSM_BOUNDARY_' + Date.now();
+    const mimeType = sponsorLogoDataUrl.split(';')[0].split(':')[1] || 'image/png';
+    const ext      = mimeType.split('/')[1] || 'png';
+    const logoB64  = sponsorLogoDataUrl.split(',')[1];
+    const fileName2 = sponsorLogoName || `sponsor-logo.${ext}`;
+    raw = [
+      `To: ${shipEmail}`,
+      `Cc: gear@middleschoolmatchup.com`,
+      `Subject: ${subject}`,
+      'MIME-Version: 1.0',
+      `Content-Type: multipart/mixed; boundary="${boundary}"`,
+      '',
+      `--${boundary}`,
+      'Content-Type: text/html; charset=utf-8',
+      'Content-Transfer-Encoding: base64',
+      '',
+      htmlB64,
+      '',
+      `--${boundary}`,
+      `Content-Type: ${mimeType}; name="${fileName2}"`,
+      'Content-Transfer-Encoding: base64',
+      `Content-Disposition: attachment; filename="${fileName2}"`,
+      '',
+      logoB64,
+      '',
+      `--${boundary}--`,
+    ].join('\r\n');
+  } else {
+    raw = [
+      `To: ${shipEmail}`,
+      `Cc: gear@middleschoolmatchup.com`,
+      `Subject: ${subject}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=utf-8',
+      'Content-Transfer-Encoding: base64',
+      '',
+      htmlB64,
+    ].join('\r\n');
+  }
+
+  // Base64url encode (Gmail API requires this format)
+  const encoded = btoa(unescape(encodeURIComponent(raw)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+  try {
+    await POST('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', { raw: encoded });
+    btn.textContent = '✓ Email Sent';
+    btn.style.background = '#16a34a';
+    btn.style.cursor = 'default';
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Submit Order (Send Email)';
+    let msg = e.message || String(e);
+    try { msg = JSON.parse(msg).error?.message || msg; } catch (_) {}
+    showStatus('Email error: ' + msg, 'error');
+  }
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+
+function v(id) { return document.getElementById(id).value.trim(); }
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) { return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+function showStatus(html, type) {
+  const div = document.getElementById('status');
+  div.classList.remove('hidden');
+  const map = { info:'bg-[#f0f4ff] border-[#c7d0f0] text-[#1a2b6b]', error:'bg-red-50 border-red-200 text-red-700', success:'bg-green-50 border-green-200 text-green-700' };
+  div.className = `p-4 rounded-xl border text-sm ${map[type] || map.info}`;
+  div.innerHTML = html;
+  div.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+</script>
+</body>
+</html>
