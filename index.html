@@ -322,6 +322,53 @@
     </div>
   </div>
 
+  <!-- Pre-flight checklist modal -->
+  <div id="preflight-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6">
+      <h2 class="text-lg font-bold text-[#1a2b6b] mb-1">Before You Create the Order Sheet</h2>
+      <p class="text-sm text-gray-500 mb-4">Please confirm the following before proceeding:</p>
+      <ul class="space-y-3 mb-6">
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk1" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk1" class="text-sm text-gray-700 cursor-pointer">Did you order <strong>Flex Jerseys</strong>?</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk2" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk2" class="text-sm text-gray-700 cursor-pointer">Did you order any <strong>extra tees</strong> to give away or for free agents?</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk3" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk3" class="text-sm text-gray-700 cursor-pointer">Did you order any <strong>extra caps</strong> for a giveaway?</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk4" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk4" class="text-sm text-gray-700 cursor-pointer">Does your <strong>total jersey count equal the number of total players</strong> that you have?</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk5" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk5" class="text-sm text-gray-700 cursor-pointer">Did you <strong>double-check that your school colors are complete</strong> in the registration sheet?</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk6" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk6" class="text-sm text-gray-700 cursor-pointer">Do you need <strong>Sponsors</strong>? If so, please don't forget to upload the logo.</label>
+        </li>
+        <li class="flex items-start gap-3">
+          <input type="checkbox" id="chk7" class="mt-0.5 w-4 h-4 accent-[#1a2b6b] flex-shrink-0">
+          <label for="chk7" class="text-sm text-gray-700 cursor-pointer">Did you check if you need <strong>rings, name banners, hype chains, park banners, or custom colorways</strong>?</label>
+        </li>
+      </ul>
+      <div class="flex gap-3">
+        <button onclick="closePreflight()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold text-sm hover:bg-gray-50 transition">
+          Go Back to Edit
+        </button>
+        <button id="preflight-proceed-btn" onclick="proceedCreateOrder()"
+                class="flex-1 bg-[#1a2b6b] text-white py-3 rounded-xl font-semibold text-sm hover:bg-[#162059] transition">
+          Proceed
+        </button>
+      </div>
+    </div>
+  </div>
+
 <script>
 const CLIENT_ID        = '134231298951-m5l7h04ih2n863abpjov4dhh1pm0ibm5.apps.googleusercontent.com';
 const DEFAULT_TEMPLATE      = '11zjdotoueHTUrO4Qf3gBTlz98u5PZyyn1rSojLn0jGI'; // Baseball / Softball
@@ -341,6 +388,24 @@ const REVERSIBLE_JERSEY_SPORTS = new Set(['Soccer', 'Bowling', '7V7']);
 function getJerseyPrice() {
   const s = document.getElementById('sport')?.value || '';
   return REVERSIBLE_JERSEY_SPORTS.has(s) ? 18.50 : 14.50;
+}
+
+function showPreflight() {
+  // Reset all checkboxes
+  for (let i = 1; i <= 7; i++) {
+    const el = document.getElementById('chk' + i);
+    if (el) el.checked = false;
+  }
+  document.getElementById('preflight-modal').classList.remove('hidden');
+}
+
+function closePreflight() {
+  document.getElementById('preflight-modal').classList.add('hidden');
+}
+
+function proceedCreateOrder() {
+  closePreflight();
+  createOrderSheet();
 }
 
 function resolveTemplateId() {
@@ -448,7 +513,7 @@ window.addEventListener('load', () => {
   document.getElementById('signin-btn').addEventListener('click',    () => tokenClient.requestAccessToken());
   document.getElementById('signout-btn').addEventListener('click',   signOut);
   document.getElementById('load-tabs-btn').addEventListener('click', loadTemplateTabs);
-  document.getElementById('create-btn').addEventListener('click',    createOrderSheet);
+  document.getElementById('create-btn').addEventListener('click', showPreflight);
   document.getElementById('use-source-btn').addEventListener('click', applyDataSource);
 });
 
