@@ -322,6 +322,54 @@
     </div>
   </div>
 
+  <!-- Payment Agreement Modal -->
+  <div id="payment-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 flex flex-col" style="max-height:90vh;">
+      <div class="p-6 pb-4 flex-shrink-0">
+        <h2 class="text-lg font-bold text-[#1a2b6b] mb-1">Payment Agreement</h2>
+        <p class="text-sm text-gray-500">Review your order summary and confirm payment before the sheet is created.</p>
+      </div>
+      <div class="overflow-y-auto px-6 flex-1">
+        <!-- Order summary table -->
+        <div class="rounded-xl border border-gray-200 overflow-hidden mb-5">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-[#1a2b6b] text-white">
+                <th class="text-left py-2 px-3 font-semibold">Gear</th>
+                <th class="text-center py-2 px-3 font-semibold w-14">QTY</th>
+                <th class="text-right py-2 px-3 font-semibold w-24">Unit Price</th>
+                <th class="text-right py-2 px-3 font-semibold w-24">Total</th>
+              </tr>
+            </thead>
+            <tbody id="payment-summary-rows"></tbody>
+            <tfoot>
+              <tr class="bg-gray-50 border-t-2 border-[#1a2b6b]">
+                <td colspan="3" class="py-2 px-3 font-bold text-[#1a2b6b] text-right">Grand Total</td>
+                <td class="py-2 px-3 font-bold text-[#1a2b6b] text-right" id="payment-total">—</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- Payment due -->
+        <div class="flex justify-between items-center bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5">
+          <span class="text-sm font-semibold text-[#8B1A1A]">Payment Due (CST)</span>
+          <span id="payment-due-date" class="text-sm font-bold text-[#8B1A1A]">—</span>
+        </div>
+        <!-- Agree checkbox -->
+        <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl border-2 border-gray-200 hover:border-[#1a2b6b] transition mb-5">
+          <input type="checkbox" id="payment-agree-chk" onchange="onPaymentCheckboxChange(this)"
+                 class="mt-0.5 w-5 h-5 accent-[#1a2b6b] flex-shrink-0">
+          <span class="text-sm text-gray-700 leading-snug">I confirm I have reviewed the order above and agree to have payment ready by <strong id="payment-agree-date">—</strong> (CST).</span>
+        </label>
+      </div>
+      <div class="p-6 pt-4 flex-shrink-0">
+        <button onclick="closePaymentModal()" class="w-full border border-gray-200 text-gray-500 py-2.5 rounded-xl text-sm hover:bg-gray-50 transition">
+          Go Back
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Pre-flight checklist modal -->
   <div id="preflight-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden">
     <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6">
@@ -405,6 +453,75 @@ function closePreflight() {
 
 function proceedCreateOrder() {
   closePreflight();
+  showPaymentAgreement();
+}
+
+function getTomorrowCST() {
+  const todayCST = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(new Date());
+  const [m, d, y] = todayCST.split('/');
+  const t = new Date(+y, +m - 1, +d + 1);
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric', month: 'long', day: 'numeric',
+  }).format(t);
+}
+
+let paymentDueDate = null;
+
+function showPaymentAgreement() {
+  let manualTotal = 0;
+  let hasAuto = false;
+  let rows = '';
+
+  for (const item of GEAR_ITEMS) {
+    if (item.emailOnly) continue;
+    let qtyCell, totalCell;
+    if (item.source === 'manual') {
+      const qty = parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0;
+      if (qty === 0) continue;
+      manualTotal += qty * (item.unitPrice || 0);
+      qtyCell = qty;
+      totalCell = `$${(qty * item.unitPrice).toFixed(2)}`;
+    } else {
+      hasAuto = true;
+      qtyCell = '<span class="text-gray-400 italic">auto</span>';
+      totalCell = '<span class="text-gray-400 italic">auto</span>';
+    }
+    const price = item.unitPrice != null ? `$${item.unitPrice.toFixed(2)}` : '—';
+    const even = rows.split('<tr').length % 2 === 0;
+    rows += `<tr class="${even ? 'bg-white' : 'bg-gray-50'}">
+      <td class="py-2 px-3 text-gray-800">${item.name}</td>
+      <td class="py-2 px-3 text-center text-gray-700">${qtyCell}</td>
+      <td class="py-2 px-3 text-right text-gray-700">${price}</td>
+      <td class="py-2 px-3 text-right font-medium text-gray-800">${totalCell}</td>
+    </tr>`;
+  }
+
+  paymentDueDate = getTomorrowCST();
+  const grandTotal = hasAuto
+    ? `$${manualTotal.toFixed(2)} + gear`
+    : `$${manualTotal.toFixed(2)}`;
+
+  document.getElementById('payment-summary-rows').innerHTML = rows;
+  document.getElementById('payment-total').textContent = grandTotal;
+  document.getElementById('payment-due-date').textContent = paymentDueDate;
+  document.getElementById('payment-agree-date').textContent = paymentDueDate;
+  document.getElementById('payment-agree-chk').checked = false;
+  document.getElementById('payment-agree-chk').disabled = false;
+  document.getElementById('payment-modal').classList.remove('hidden');
+}
+
+function closePaymentModal() {
+  document.getElementById('payment-modal').classList.add('hidden');
+}
+
+function onPaymentCheckboxChange(chk) {
+  if (!chk.checked) return;
+  chk.disabled = true;
+  closePaymentModal();
   createOrderSheet();
 }
 
@@ -1936,11 +2053,12 @@ async function createOrderSheet() {
             Open in Google Sheets ↗
           </a>
           <button id="submit-order-btn" onclick="submitOrder()"
-                  class="inline-block bg-[#1a2b6b] text-white px-6 py-2 rounded-lg hover:bg-[#152257] transition font-medium text-sm">
-            Submit Order (Send Email)
+                  class="inline-block bg-[#1a2b6b] text-white px-6 py-2 rounded-lg hover:bg-[#152257] transition font-medium text-sm" disabled>
+            Sending confirmation…
           </button>
         </div>
       </div>`, 'success');
+    submitOrder();
 
   } catch (err) {
     let msg = err.message;
@@ -1956,9 +2074,7 @@ async function createOrderSheet() {
 async function submitOrder() {
   if (!lastOrderData) return;
   const btn = document.getElementById('submit-order-btn');
-  if (!btn) return;
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
 
   const { fileName, fileId, market, year, season, sport, orderNum, orderDate, eta,
           shipName, shipAddr, shipPhone, shipEmail, resolvedQty,
@@ -1985,11 +2101,15 @@ async function submitOrder() {
       </tr>`;
   }
 
+  const dueDate = paymentDueDate || getTomorrowCST();
   const htmlBody = `
     <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;color:#222;">
       <div style="background:#1a2b6b;padding:20px 24px;border-radius:8px 8px 0 0;">
-        <h2 style="color:#fff;margin:0;font-size:18px;">MSM Order Submitted</h2>
+        <h2 style="color:#fff;margin:0;font-size:18px;">MSM Order Confirmation</h2>
         <p style="color:#c7d0f0;margin:4px 0 0;font-size:13px;">${fileName}</p>
+      </div>
+      <div style="background:#8B1A1A;color:#fff;padding:10px 24px;font-size:13px;text-align:center;">
+        ✓ Invoice confirmed — payment due by <strong>${dueDate}</strong> (CST)
       </div>
       <div style="background:#f8f9ff;padding:20px 24px;border:1px solid #dde3f5;border-top:none;">
 
@@ -2083,12 +2203,17 @@ async function submitOrder() {
 
   try {
     await POST('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', { raw: encoded });
-    btn.textContent = '✓ Email Sent';
-    btn.style.background = '#16a34a';
-    btn.style.cursor = 'default';
+    if (btn) {
+      btn.textContent = '✓ Confirmation Sent';
+      btn.style.background = '#16a34a';
+      btn.style.cursor = 'default';
+      btn.disabled = true;
+    }
   } catch (e) {
-    btn.disabled = false;
-    btn.textContent = 'Submit Order (Send Email)';
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Resend Confirmation Email';
+    }
     let msg = e.message || String(e);
     try { msg = JSON.parse(msg).error?.message || msg; } catch (_) {}
     showStatus('Email error: ' + msg, 'error');
