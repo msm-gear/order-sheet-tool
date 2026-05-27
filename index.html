@@ -451,9 +451,9 @@ function closePreflight() {
   document.getElementById('preflight-modal').classList.add('hidden');
 }
 
-function proceedCreateOrder() {
+async function proceedCreateOrder() {
   closePreflight();
-  showPaymentAgreement();
+  await showPaymentAgreement();
 }
 
 function getTomorrowCST() {
@@ -471,47 +471,138 @@ function getTomorrowCST() {
 
 let paymentDueDate = null;
 
-function showPaymentAgreement() {
-  let manualTotal = 0;
-  let hasAuto = false;
+// Read total quantity for an auto item directly from the source registration sheet.
+// Returns a number or null if unable to determine.
+async function estimateSourceQty(item) {
+  const tab = gearMapping[item.name];
+  if (!tab) return null;
+
+  if (item.fillType === 'single_total') {
+    try { return await getGearTotal(tab.title, item); } catch { return null; }
+  }
+
+  // full_table / sizes_only: read source tab and sum size columns from TOTAL row
+  try {
+    const range = encodeURIComponent(`'${tab.title}'!A:ZZ`);
+    const data = await GET(`https://sheets.googleapis.com/v4/spreadsheets/${sourceSheetId}/values/${range}?majorDimension=ROWS`);
+    const rows = data.values || [];
+    const SZ = new Set(['AL','AM','AS','AXL','AXXL','A2XL','YL','YM','YXL']);
+
+    // Find header row
+    let hdrIdx = -1, sizeColIdxs = [], teamColIdx = -1;
+    for (let ri = 0; ri < Math.min(rows.length, 50); ri++) {
+      const norm = (rows[ri] || []).map(c => String(c || '').trim().toUpperCase());
+      if (norm.some(h => h === 'MIDDLE SCHOOL') || norm.filter(h => SZ.has(h)).length >= 2) {
+        hdrIdx = ri;
+        sizeColIdxs = norm.map((c, i) => SZ.has(c) ? i : -1).filter(i => i >= 0);
+        teamColIdx = norm.indexOf('MIDDLE SCHOOL');
+        break;
+      }
+    }
+
+    if (hdrIdx >= 0 && sizeColIdxs.length > 0) {
+      // Look for TOTAL row first; if none, sum all data rows
+      let total = 0, foundTotalRow = false;
+      for (let ri = hdrIdx + 1; ri < rows.length; ri++) {
+        const row = rows[ri] || [];
+        const teamCell = teamColIdx >= 0 ? String(row[teamColIdx] || '').trim().toUpperCase() : '';
+        if (teamCell === 'TOTAL' || teamCell === 'GRAND TOTAL') {
+          total = sizeColIdxs.reduce((s, ci) => {
+            const v = parseFloat(String(row[ci] || '').replace(/,/g, ''));
+            return s + (isNaN(v) || v <= 0 ? 0 : v);
+          }, 0);
+          foundTotalRow = true;
+          break;
+        }
+        if (!foundTotalRow && teamCell && teamCell !== 'MIDDLE SCHOOL') {
+          sizeColIdxs.forEach(ci => {
+            const v = parseFloat(String(row[ci] || '').replace(/,/g, ''));
+            if (!isNaN(v) && v > 0) total += v;
+          });
+        }
+      }
+      if (total > 0) return total;
+    }
+
+    // Fallback: 2-column SIZE_SET + adjacent number scan
+    let total = 0;
+    for (const row of rows) {
+      const cells = (row || []).map(c => String(c || '').trim());
+      for (let i = 0; i < cells.length - 1; i++) {
+        if (SZ.has(cells[i].toUpperCase())) {
+          const v = parseFloat(cells[i + 1].replace(/,/g, ''));
+          if (!isNaN(v) && v > 0) total += v;
+        }
+      }
+    }
+    return total > 0 ? total : null;
+  } catch { return null; }
+}
+
+async function showPaymentAgreement() {
+  // Show modal immediately with loading state
+  paymentDueDate = getTomorrowCST();
+  document.getElementById('payment-summary-rows').innerHTML =
+    `<tr><td colspan="4" class="py-4 text-center text-sm text-gray-400 italic">Loading quantities…</td></tr>`;
+  document.getElementById('payment-total').textContent = '—';
+  document.getElementById('payment-due-date').textContent = paymentDueDate;
+  document.getElementById('payment-agree-date').textContent = paymentDueDate;
+  document.getElementById('payment-agree-chk').checked = false;
+  document.getElementById('payment-agree-chk').disabled = true;
+  document.getElementById('payment-modal').classList.remove('hidden');
+
+  // Fetch auto quantities from source sheet in parallel
+  const autoItems = GEAR_ITEMS.filter(g => g.source === 'auto' && !g.emailOnly);
+  const autoQtys = await Promise.all(autoItems.map(item => estimateSourceQty(item)));
+  const autoQtyMap = Object.fromEntries(autoItems.map((item, i) => [item.name, autoQtys[i]]));
+
+  // Build table rows
   let rows = '';
+  let grandTotal = 0;
+  let hasUnknown = false;
+  let rowIdx = 0;
 
   for (const item of GEAR_ITEMS) {
     if (item.emailOnly) continue;
-    let qtyCell, totalCell;
+    let qty, qtyCell, totalCell;
+
     if (item.source === 'manual') {
-      const qty = parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0;
+      qty = parseInt(document.getElementById(item.inputId)?.value || '0', 10) || 0;
       if (qty === 0) continue;
-      manualTotal += qty * (item.unitPrice || 0);
+      grandTotal += qty * (item.unitPrice || 0);
       qtyCell = qty;
       totalCell = `$${(qty * item.unitPrice).toFixed(2)}`;
     } else {
-      hasAuto = true;
-      qtyCell = '<span class="text-gray-400 italic">auto</span>';
-      totalCell = '<span class="text-gray-400 italic">auto</span>';
+      qty = autoQtyMap[item.name];
+      if (qty != null && qty > 0) {
+        grandTotal += qty * (item.unitPrice || 0);
+        qtyCell = qty;
+        totalCell = `$${(qty * item.unitPrice).toFixed(2)}`;
+      } else {
+        hasUnknown = true;
+        qtyCell = '<span class="text-gray-400 italic">—</span>';
+        totalCell = '<span class="text-gray-400 italic">—</span>';
+      }
     }
+
+    const bg = rowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
     const price = item.unitPrice != null ? `$${item.unitPrice.toFixed(2)}` : '—';
-    const even = rows.split('<tr').length % 2 === 0;
-    rows += `<tr class="${even ? 'bg-white' : 'bg-gray-50'}">
+    rows += `<tr class="${bg}">
       <td class="py-2 px-3 text-gray-800">${item.name}</td>
       <td class="py-2 px-3 text-center text-gray-700">${qtyCell}</td>
       <td class="py-2 px-3 text-right text-gray-700">${price}</td>
       <td class="py-2 px-3 text-right font-medium text-gray-800">${totalCell}</td>
     </tr>`;
+    rowIdx++;
   }
 
-  paymentDueDate = getTomorrowCST();
-  const grandTotal = hasAuto
-    ? `$${manualTotal.toFixed(2)} + gear`
-    : `$${manualTotal.toFixed(2)}`;
+  const grandTotalDisplay = hasUnknown
+    ? `$${grandTotal.toFixed(2)}+`
+    : `$${grandTotal.toFixed(2)}`;
 
   document.getElementById('payment-summary-rows').innerHTML = rows;
-  document.getElementById('payment-total').textContent = grandTotal;
-  document.getElementById('payment-due-date').textContent = paymentDueDate;
-  document.getElementById('payment-agree-date').textContent = paymentDueDate;
-  document.getElementById('payment-agree-chk').checked = false;
+  document.getElementById('payment-total').textContent = grandTotalDisplay;
   document.getElementById('payment-agree-chk').disabled = false;
-  document.getElementById('payment-modal').classList.remove('hidden');
 }
 
 function closePaymentModal() {
