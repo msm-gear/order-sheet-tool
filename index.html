@@ -359,7 +359,7 @@
         <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl border-2 border-gray-200 hover:border-[#1a2b6b] transition mb-5">
           <input type="checkbox" id="payment-agree-chk" onchange="onPaymentCheckboxChange(this)"
                  class="mt-0.5 w-5 h-5 accent-[#1a2b6b] flex-shrink-0">
-          <span class="text-sm text-gray-700 leading-snug">I confirm I have reviewed the order above and agree to have payment ready by <strong id="payment-agree-date">—</strong> (CST).</span>
+          <span class="text-sm text-gray-700 leading-snug">I confirm I have reviewed the order above and authorize Middle School Matchup to collect payment in full via ACH debit by <strong id="payment-agree-date">—</strong> (CST).</span>
         </label>
       </div>
       <div class="p-6 pt-4 flex-shrink-0">
@@ -2151,7 +2151,7 @@ async function submitOrder() {
 
         <div style="margin-top:24px;padding:16px 18px;background:#f8f9ff;border:1px solid #c7d0f0;border-radius:6px;font-size:11.5px;color:#555;line-height:1.6;">
           <p style="margin:0 0 6px;font-weight:700;color:#1a2b6b;font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Payment Authorization</p>
-          <p style="margin:0;">By submitting this order, the franchisee named above acknowledged and agreed to the full cost of this order as itemized in the Order Summary above. Payment in full is due no later than <strong style="color:#1a2b6b;">${dueDate}</strong> (CST). This email serves as a record of that agreement. Failure to remit payment by the due date may result in delays to order processing and fulfillment.</p>
+          <p style="margin:0;">By submitting this order, the franchisee named above acknowledged and agreed to the full cost of this order as itemized in the Order Summary above. The franchisee further authorized Middle School Matchup to collect payment in full via ACH debit no later than <strong style="color:#1a2b6b;">${dueDate}</strong> (CST). This email serves as a record of that authorization. Failure to maintain sufficient funds or remit payment by the due date may result in delays to order processing and fulfillment.</p>
         </div>
       </div>
     </div>`;
